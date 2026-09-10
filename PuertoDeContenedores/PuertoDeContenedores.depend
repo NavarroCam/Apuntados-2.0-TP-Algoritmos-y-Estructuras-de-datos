@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1789068223 source:c:\users\iaraaristimuño\documents\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\main.c
+	<stdio.h>
+	<stdlib.h>
+
