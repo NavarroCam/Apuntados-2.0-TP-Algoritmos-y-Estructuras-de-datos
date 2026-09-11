@@ -3,3 +3,41 @@
 	<stdio.h>
 	<stdlib.h>
 
+1789132069 source:c:\users\iaraaristimuño\documents\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\bibliotecas\cola.c
+	"cola.h"
+
+1789074996 c:\users\iaraaristimuño\documents\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\bibliotecas\cola.h
+	"definiciones.h"
+
+1789132148 c:\users\iaraaristimuño\documents\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\bibliotecas\definiciones.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../estructuras.h"
+
+1789132148 c:\users\iaraaristimuño\documents\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\estructuras.h
+
+1789132069 source:c:\proyectos\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\bibliotecas\cola.c
+	"cola.h"
+
+1789134620 c:\proyectos\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\bibliotecas\cola.h
+	"definiciones.h"
+
+1789132148 c:\proyectos\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\bibliotecas\definiciones.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../estructuras.h"
+
+1789132148 c:\proyectos\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\estructuras.h
+
+1789068223 source:c:\proyectos\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\main.c
+	<stdio.h>
+	<stdlib.h>
+
+1789134545 source:c:\proyectos\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\bibliotecas\pila.c
+	"pila.h"
+
+1789134000 c:\proyectos\algoritmosyestructurasdedatos\apuntados-2.0-tp-algoritmos-y-estructuras-de-datos\puertodecontenedores\bibliotecas\pila.h
+	"definiciones.h"
+

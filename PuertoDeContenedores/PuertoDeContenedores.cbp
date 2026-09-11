@@ -31,6 +31,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Bibliotecas/cola.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Bibliotecas/cola.h" />
+		<Unit filename="Bibliotecas/definiciones.h" />
+		<Unit filename="Bibliotecas/lista.h" />
+		<Unit filename="Bibliotecas/pila.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Bibliotecas/pila.h" />
+		<Unit filename="estructuras.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
