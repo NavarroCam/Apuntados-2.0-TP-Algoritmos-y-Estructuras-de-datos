@@ -1,0 +1,24 @@
+# Carpetas de compilación
+bin/
+obj/
+
+# Artefactos de compilación C
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.so
+*.dll
+
+# Code::Blocks
+*.depend
+*.layout
+*.cbp.bak
+
+# Editor / SO
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
