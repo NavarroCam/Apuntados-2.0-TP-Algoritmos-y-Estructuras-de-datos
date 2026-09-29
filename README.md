@@ -25,7 +25,7 @@ Simulación interactiva en C de un puerto de contenedores: el usuario asume el r
 
 ## Requisitos
 
-- GCC compatible con C99
+- GCC
 - Code::Blocks (opcional, para abrir el `.cbp`)
 
 ## Ejecución

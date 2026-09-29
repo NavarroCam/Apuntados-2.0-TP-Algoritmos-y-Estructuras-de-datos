@@ -1,14 +1,11 @@
 #ifndef CONFIG_H_INCLUDED
 #define CONFIG_H_INCLUDED
 
-#define ARCH_CONFIG "Archivos/config.txt"
+#include "comun.h"
 
+#define ARCH_CONFIG "Archivos/config.txt"
 #define TAM_NOMBRE_OPERADOR 31
 #define TAM_LINEA_CONFIG 256
-
-#define ERROR_APERTURA 0
-#define TODO_OK 1
-
 #define ES_DIGITO(c) (((c) >= '0') && ((c) <= '9'))
 
 typedef struct

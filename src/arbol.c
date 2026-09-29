@@ -183,6 +183,8 @@ int cargarDesdeDatosOrdenadosRec(tArbolBinBusq *p, void *ds, unsigned (*leer)(vo
 {
     int m = (li + ls) / 2, r;
 
+    if(li > ls)
+        return TODO_BIEN;
     *p = malloc(sizeof(tNodoArbol));
     if (!*p || !((*p)->tamInfo = leer(&(*p)->info, ds, m, params)))
     {
@@ -196,7 +198,7 @@ int cargarDesdeDatosOrdenadosRec(tArbolBinBusq *p, void *ds, unsigned (*leer)(vo
     return cargarDesdeDatosOrdenadosRec(&(*p)->der, ds, leer, m + 1, ls, params);
 }
 
-int cargarArchivoBinOrdenadoAbiertoArb01BinBusq(tArbolBinBusq *p, FILE *pf, unsigned tamlnfo)
+int cargarArchivoBinOrdenadoAbiertoArbolBinBusq(tArbolBinBusq *p, FILE *pf, unsigned tamlnfo)
 {
     int cantReg;
 
@@ -215,7 +217,7 @@ int cargarArchivoBinOrdenadoArbolBinBusq(tArbolBinBusq *p, const char *path, uns
     if (*p)
         return SIN_INICIALIZAR;
 
-    if (!(pf = fopen(path, "rt")))
+    if (!(pf = fopen(path, "rb")))
         return ERROR_ARCH;
 
     fseek(pf, 0L, SEEK_END);

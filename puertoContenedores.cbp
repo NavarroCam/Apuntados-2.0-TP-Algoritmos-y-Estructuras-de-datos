@@ -46,6 +46,9 @@
 		<Unit filename="src/cola.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/comun.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/config.c">
 			<Option compilerVar="CC" />
 		</Unit>

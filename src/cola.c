@@ -50,7 +50,7 @@ int sacarDeCola(tCola* p, void* d, unsigned cantBytes)
     free(aux);
     if(p->pri == NULL)
         p->ult = NULL;
-    return 0;
+    return 1;
 }
 
 int verPrimeroCola(const tCola* p, void* d, unsigned cantBytes)

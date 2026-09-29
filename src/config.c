@@ -85,7 +85,7 @@ int cargarConfiguracion(tConfiguracion *config, const char *nomArch)
 
     pf = fopen(nomArch, "rt");
     if(!pf)
-        return ERROR_APERTURA;
+        return ERROR_ARCH;
 
     while(fgets(linea, TAM_LINEA_CONFIG, pf))
     {
@@ -105,7 +105,7 @@ int cargarConfiguracion(tConfiguracion *config, const char *nomArch)
         }
     }
     fclose(pf);
-    return TODO_OK;
+    return TODO_BIEN;
 }
 
 int esNumeroPos(const char* cad)
@@ -127,7 +127,7 @@ int guardarConfiguracion(const tConfiguracion *config, const char *nomArch)
 
     pf = fopen(nomArch, "wt");
     if(!pf)
-        return ERROR_APERTURA;
+        return ERROR_ARCH;
 
     fprintf(pf, "duracion_jornada_minutos: %u\n", config->duracionJornadaMinutos);
     fprintf(pf, "cantidad_muelles: %u\n", config->cantidadMuelles);
@@ -140,7 +140,7 @@ int guardarConfiguracion(const tConfiguracion *config, const char *nomArch)
     fprintf(pf, "tiempo_reubicacion_contenedor: %u\n", config->tiempoReubicacionContenedor);
     fprintf(pf, "tiempo_carga_camion: %u\n", config->tiempoCargaCamion);
     fclose(pf);
-    return TODO_OK;
+    return TODO_BIEN;
 }
 
 void mostrarConfiguracion(const tConfiguracion *config)
