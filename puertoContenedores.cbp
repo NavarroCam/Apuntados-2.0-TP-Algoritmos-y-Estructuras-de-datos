@@ -34,6 +34,7 @@
 		<Unit filename="include/arbol.h" />
 		<Unit filename="include/cola.h" />
 		<Unit filename="include/comun.h" />
+		<Unit filename="include/config.h" />
 		<Unit filename="include/lista.h" />
 		<Unit filename="include/pila.h" />
 		<Unit filename="main.c">
@@ -43,6 +44,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/cola.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/config.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lista.c">
