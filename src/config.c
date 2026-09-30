@@ -98,7 +98,7 @@ int cargarConfiguracion(tConfiguracion *config, const char *nomArch)
             cadValor = recortarCadena(separador + 1);
             if(*param != '\0' && esNumeroPos(cadValor))
             {
-                valor = (unsigned) (*cadValor) - '0';
+                valor = (unsigned) atoi(cadValor);
                 if(valor > 0)
                     asignarParametro(config, param, valor);
             }
