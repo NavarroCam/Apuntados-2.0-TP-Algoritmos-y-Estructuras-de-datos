@@ -32,7 +32,7 @@ No se sube a GitHub porque el .gitignore ignora los .exe.
 
 #define PUNTAJE_ESPERADO 60
 
-int main(void)
+int main()
 {
     tHistorial historial;
     tPuntuacion puntos;
@@ -71,5 +71,5 @@ int main(void)
 
     vaciarHistorial(&historial);
 
-    return puntaje == PUNTAJE_ESPERADO ? 0 : 1;
+    return puntaje == PUNTAJE_ESPERADO ? EXIT_SUCCESS : EXIT_FAILURE;
 }
