@@ -35,8 +35,11 @@
 		<Unit filename="include/cola.h" />
 		<Unit filename="include/comun.h" />
 		<Unit filename="include/config.h" />
+		<Unit filename="include/historial.h" />
+		<Unit filename="include/interfaz.h" />
 		<Unit filename="include/lista.h" />
 		<Unit filename="include/pila.h" />
+		<Unit filename="include/puntuacion.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -52,10 +55,19 @@
 		<Unit filename="src/config.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/historial.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/interfaz.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/lista.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/pila.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/puntuacion.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions />
