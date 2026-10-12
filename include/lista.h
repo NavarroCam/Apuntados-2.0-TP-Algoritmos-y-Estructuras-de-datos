@@ -4,6 +4,7 @@
 #include "comun.h"
 
 typedef tNodo* tLista;
+typedef int (*tCmpLista)(const void *, const void *);
 
 void crearLista(tLista *p);
 int listaVacia(const tLista *p);
@@ -18,5 +19,6 @@ int verPrimeroLista(tLista *p, void *d, unsigned cantBytes);
 int verUltimoLista(tLista *p, void *d, unsigned cantBytes);
 void vaciarLista(tLista *p);
 int mostrarLista(const tLista *p, Mostrar mostrar, FILE* pf);
+int insertarEnOrden(tLista *pLista, const void *dato, unsigned cantBytes, tCmpLista cmp);
 
 #endif // LISTA_H_INCLUDED

@@ -135,3 +135,18 @@ int mostrarLista(const tLista* p, Mostrar mostrar, FILE* pf)
     }
     return 1;
 }
+int insertarEnOrden(tLista *pLista, const void *dato, unsigned cantBytes, tCmpLista cmp)
+{
+    tNodo  *nuevo;
+
+    while(*pLista != NULL && cmp((*pLista)->info, dato) <= 0)
+        pLista = &(*pLista)->sig;
+    if(!reservarMemoriaNodo(nuevo, sizeof(tNodo), nuevo->info, cantBytes))
+        return 0;
+    memcpy(nuevo->info, dato, cantBytes);
+    nuevo->tamInfo = cantBytes;
+    nuevo->sig = *pLista;
+    *pLista = nuevo;
+    return 1;
+}
+

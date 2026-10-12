@@ -34,6 +34,7 @@ unsigned alturaArbolBin(const tArbolBinBusq *p);
 int eliminarRaizArbol(tArbolBinBusq *p);
 int eliminarElemArbolBinBusq(tArbolBinBusq *p, void *d, unsigned cantBytes,
                              Cmp comparar);
+void vaciarArbolBinBusq(tArbolBinBusq *p);
 
 unsigned leerDesdeArchivo(void **d, void *pf, unsigned pos, void *params);
 int cargarDesdeDatosOrdenadosRec(tArbolBinBusq *p, void *ds,

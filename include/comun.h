@@ -7,6 +7,7 @@
 #include <ctype.h>
 
 #define TODO_BIEN       1
+#define ERROR           0
 #define SIN_MEM         0
 #define CLA_DUP         0
 #define ERROR_ARCH      0

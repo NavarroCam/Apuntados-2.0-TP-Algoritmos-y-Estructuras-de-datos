@@ -168,6 +168,17 @@ int eliminarElemArbolBinBusq(tArbolBinBusq *p, void *d, unsigned cantBytes, Cmp 
     return eliminarRaizArbol(p);
 }
 
+void vaciarArbolBinBusq(tArbolBinBusq *p)
+{
+    if (!*p)
+        return;
+    vaciarArbolBinBusq(&(*p)->izq);
+    vaciarArbolBinBusq(&(*p)->der);
+    free((*p)->info);
+    free(*p);
+    *p = NULL;
+}
+
 unsigned leerDesdeArchivo(void **d, void *pf, unsigned pos, void *params)
 {
     unsigned tam = *(int *)params;
