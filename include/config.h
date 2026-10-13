@@ -3,10 +3,12 @@
 
 #include "comun.h"
 
-#define ARCH_CONFIG "Archivos/config.txt"
-#define TAM_NOMBRE_OPERADOR 31
-#define TAM_LINEA_CONFIG 256
-#define ES_DIGITO(c) (((c) >= '0') && ((c) <= '9'))
+/* Limites para que los codigos entren en TAM_CODIGO (B999, K999 y
+   C<buque><nn>, por ejemplo C101 o C99999). */
+#define MAX_RECURSOS                999
+#define MAX_BUQUES                  999
+#define MAX_CAMIONES                999
+#define MAX_CONTENEDORES_POR_BUQUE  99
 
 typedef struct
 {
@@ -20,15 +22,14 @@ typedef struct
     unsigned tiempoDescargaContenedor;
     unsigned tiempoReubicacionContenedor;
     unsigned tiempoCargaCamion;
-} tConfiguracion;
+} tConfig;
 
-void establecerConfiguracionPorDefecto(tConfiguracion *configuracion);
-int cargarConfiguracion(tConfiguracion *config, const char *nomArch);
-int guardarConfiguracion(const tConfiguracion *config, const char *nomArch);
-void mostrarConfiguracion(const tConfiguracion *configuracion);
+/* Lee config.txt; los parametros que falten quedan con los valores del
+   ejemplo de la consigna y, si el archivo no existe, lo genera con ellos.
+   Devuelve TODO_BIEN, o ERROR_ARCH si no se pudo generar o algun valor
+   supera los maximos. */
+int cargarConfiguracion(tConfig *config, const char *nomArch);
+int guardarConfiguracion(const tConfig *config, const char *nomArch);
+void mostrarConfiguracion(const tConfig *config);
 
-char* recortarCadena(char *cadena);
-void convertMinusCadena(char *cadena);
-void asignarParametro(tConfiguracion *configuracion, const char *clave, unsigned valor);
-int esNumeroPos(const char* cad);
-#endif // CONFIG_H_INCLUDED
+#endif /* CONFIG_H_INCLUDED */

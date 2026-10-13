@@ -1,18 +1,18 @@
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include "../include/config.h"
 
-char* recortarCadena(char *cadena)
+#define TAM_LINEA_CONFIG    128
+#define MAX_DIGITOS         9
+
+char *recortarCadena(char *cadena)
 {
     char *fin;
 
-    while(*cadena != '\0' && isspace((char)*cadena))
+    while(*cadena != '\0' && isspace((unsigned char)*cadena))
     {
         cadena++;
     }
     fin = cadena + strlen(cadena);
-    while(fin > cadena && isspace((char)*(fin - 1)))
+    while(fin > cadena && isspace((unsigned char)*(fin - 1)))
     {
         fin--;
     }
@@ -27,12 +27,26 @@ void convertMinusCadena(char *cadena)
 
     while(*auxCad != '\0')
     {
-        *auxCad = (char)tolower((char)*auxCad);
+        *auxCad = tolower((unsigned char)*auxCad);
         auxCad++;
     }
 }
 
-void asignarParametro(tConfiguracion *config, const char *clave, unsigned valor)
+/* Hasta MAX_DIGITOS digitos para que atoi no desborde. */
+int esNumeroPos(const char* cad)
+{
+    if(*cad == '\0' || strlen(cad) > MAX_DIGITOS)
+        return 0;
+    while(*cad != '\0')
+    {
+        if(!isdigit((unsigned char)*cad))
+            return 0;
+        cad++;
+    }
+    return 1;
+}
+
+void asignarParametro(tConfig *config, const char *clave, unsigned valor)
 {
     if(strcmp(clave, "duracion_jornada_minutos") == 0)
         config->duracionJornadaMinutos = valor;
@@ -58,7 +72,7 @@ void asignarParametro(tConfiguracion *config, const char *clave, unsigned valor)
         printf("  [config] Parametro desconocido ignorado: %s\n", clave);
 }
 
-void establecerConfiguracionPorDefecto(tConfiguracion *config)
+void establecerConfiguracionPorDefecto(tConfig *config)
 {
     config->duracionJornadaMinutos = 30;
     config->cantidadMuelles = 1;
@@ -72,7 +86,16 @@ void establecerConfiguracionPorDefecto(tConfiguracion *config)
     config->tiempoCargaCamion = 2;
 }
 
-int cargarConfiguracion(tConfiguracion *config, const char *nomArch)
+int configuracionValida(const tConfig *config)
+{
+    return config->cantidadMuelles <= MAX_RECURSOS &&
+           config->cantidadZonasAlmacenamiento <= MAX_RECURSOS &&
+           config->maximoBuques <= MAX_BUQUES &&
+           config->maximoContenedoresPorBuque <= MAX_CONTENEDORES_POR_BUQUE &&
+           config->maximoCamiones <= MAX_CAMIONES;
+}
+
+int cargarConfiguracion(tConfig *config, const char *nomArch)
 {
     FILE *pf;
     char linea[TAM_LINEA_CONFIG];
@@ -81,15 +104,17 @@ int cargarConfiguracion(tConfiguracion *config, const char *nomArch)
     char *cadValor;
     unsigned valor;
 
-    establecerConfiguracionPorDefecto(config);//se hace aca por si algun parametro llega a estar vacío
+    /* Se cargan antes por si algun parametro falta o esta vacio. */
+    establecerConfiguracionPorDefecto(config);
 
     pf = fopen(nomArch, "rt");
     if(!pf)
-        return ERROR_ARCH;
+        return guardarConfiguracion(config, nomArch);
 
     while(fgets(linea, TAM_LINEA_CONFIG, pf))
     {
-        separador = strpbrk(linea, ":=");//la funcion busca en linea los caracteres pasados en el segundo parametro.
+        /* Busca en la linea el primer ':' o '='. */
+        separador = strpbrk(linea, ":=");
         if(separador != NULL)
         {
             *separador = '\0';
@@ -98,30 +123,17 @@ int cargarConfiguracion(tConfiguracion *config, const char *nomArch)
             cadValor = recortarCadena(separador + 1);
             if(*param != '\0' && esNumeroPos(cadValor))
             {
-                valor = (unsigned) atoi(cadValor);
+                valor = atoi(cadValor);
                 if(valor > 0)
                     asignarParametro(config, param, valor);
             }
         }
     }
     fclose(pf);
-    return TODO_BIEN;
+    return configuracionValida(config) ? TODO_BIEN : ERROR_ARCH;
 }
 
-int esNumeroPos(const char* cad)
-{
-    if(*cad == '\0')
-        return 0;
-    while(*cad != '\0')
-    {
-        if(!ES_DIGITO(*cad))
-            return 0;
-        cad++;
-    }
-    return 1;
-}
-
-int guardarConfiguracion(const tConfiguracion *config, const char *nomArch)
+int guardarConfiguracion(const tConfig *config, const char *nomArch)
 {
     FILE *pf;
 
@@ -143,7 +155,7 @@ int guardarConfiguracion(const tConfiguracion *config, const char *nomArch)
     return TODO_BIEN;
 }
 
-void mostrarConfiguracion(const tConfiguracion *config)
+void mostrarConfiguracion(const tConfig *config)
 {
     printf("\n  PARAMETROS DE LA JORNADA\n");
     printf("  ------------------------------------------------------\n");
