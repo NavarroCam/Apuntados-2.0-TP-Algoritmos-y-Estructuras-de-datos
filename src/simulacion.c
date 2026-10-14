@@ -25,7 +25,7 @@ void avanzarReloj(tEstadoSimulacion *e, unsigned hasta)
         sacarDeCola(&e->arribosCamiones, &camion, sizeof(tCamion));
         ponerEnCola(&e->colaCamiones, &camion, sizeof(tCamion));
     }
-    map(&e->muelles, &e->esperaBuques, asignarMuelle);
+    _map(&e->muelles, &e->esperaBuques, asignarMuelle);
 }
 
 int hayTiempo(const tEstadoSimulacion *e, unsigned duracion)
@@ -151,8 +151,8 @@ void mostrarEstado(tEstadoSimulacion *e)
     verCola(&e->esperaBuques, sizeof(tBuque), &esperando, contarElementos);
     printf("\nT=%u de %u | puntaje provisorio: %d | buques esperando muelle: %u\n",
            e->reloj, e->config.duracionJornadaMinutos, e->puntaje, esperando);
-    map(&e->muelles, NULL, mostrarMuelle);
-    map(&e->zonas, NULL, mostrarZona);
+    _map(&e->muelles, NULL, mostrarMuelle);
+    _map(&e->zonas, NULL, mostrarZona);
     printf("  Cola de camiones:%s\n", colaVacia(&e->colaCamiones) ? " vacia" : "");
     verCola(&e->colaCamiones, sizeof(tCamion), NULL, mostrarCamionVentana);
 }
@@ -239,7 +239,7 @@ void mostrarResumen(tEstadoSimulacion *e, const char *motivo)
     penalizacion = 2 * e->camionesPendientes;
     e->puntaje -= penalizacion;
     printf("\n== FIN DE LA JORNADA: %s ==\n\nHistorial de operaciones:\n", motivo);
-    map(&e->historial, NULL, mostrarRegistroOperacion);
+    _map(&e->historial, NULL, mostrarRegistroOperacion);
     printf("\nRESUMEN\n  Tiempo utilizado: %u min de %u\n", e->reloj, e->config.duracionJornadaMinutos);
     printf("  Buques descargados: %u -> %u puntos\n", e->buquesDescargados, 5 * e->buquesDescargados);
     printf("  Contenedores entregados: %u -> %u puntos\n", e->contenedoresEntregados, 10 * e->contenedoresEntregados);
@@ -262,8 +262,8 @@ void jugarJornada(tEstadoSimulacion *e)
     while (!motivo)
     {
         r = sinRecursos;
-        map(&e->zonas, &r, contarZona);
-        map(&e->muelles, &r, contarMuelle);
+        _map(&e->zonas, &r, contarZona);
+        _map(&e->muelles, &r, contarMuelle);
         if (finalizacionNormal(e, &r))
             motivo = "finalizacion normal";
         else if (e->reloj >= e->config.duracionJornadaMinutos)

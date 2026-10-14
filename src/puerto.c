@@ -63,8 +63,8 @@ void vaciarEstadoSimulacion(tEstadoSimulacion *estado)
     vaciarCola(&estado->esperaBuques);
     vaciarCola(&estado->arribosCamiones);
     vaciarCola(&estado->colaCamiones);
-    map(&estado->muelles, NULL, vaciarMuelle);
-    map(&estado->zonas, NULL, vaciarZona);
+    _map(&estado->muelles, NULL, vaciarMuelle);
+    _map(&estado->zonas, NULL, vaciarZona);
     vaciarLista(&estado->muelles);
     vaciarLista(&estado->zonas);
     vaciarLista(&estado->historial);

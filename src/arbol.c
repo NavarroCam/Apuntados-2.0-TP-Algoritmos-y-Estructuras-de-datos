@@ -305,14 +305,14 @@ int esAVLArbolBin(const tArbolBinBusq *p)
     return esAVLArbolBin(&(*p)->izq) && esAVLArbolBin(&(*p)->der);
 }
 
-void vaciarArbol (tArbolBin* pa)
+void vaciarArbolBinBusq(tArbolBinBusq* p)
 {
-    if ((*pa)!=NULL)
+    if ((*p)!=NULL)
     {
-        vaciarArbol (&(*pa)->hijoIzq);
-        vaciarArbol (&(*pa)->hijoDer);
-        free ((*pa)->info);
-        free (*pa);
-        (*pa)=NULL;
+        vaciarArbolBinBusq(&(*p)->izq);
+        vaciarArbolBinBusq(&(*p)->der);
+        free((*p)->info);
+        free(*p);
+        (*p)=NULL;
     }
 }
