@@ -54,5 +54,5 @@ int esCompletoHastaNivelArbolBin(const tArbolBinBusq *p, int n);
 int esCompletoArbolBin(const tArbolBinBusq *p);
 int esBalanceadoArbolBin(const tArbolBinBusq *p);
 int esAVLArbolBin(const tArbolBinBusq *p);
-
+void vaciarArbol (tArbolBin* pa);
 #endif // ARBOL_H_INCLUDED

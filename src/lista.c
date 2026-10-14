@@ -135,3 +135,41 @@ int mostrarLista(const tLista* p, Mostrar mostrar, FILE* pf)
     }
     return 1;
 }
+
+void _map(tLista *p, void *params, Accion accion)
+{
+    unsigned n = 0;
+
+    while (*p)
+    {
+        accion((*p)->info, (*p)->tamInfo, n, params);
+        p = &(*p)->sig;
+        n++;
+    }
+}
+
+tLista* buscarNodoLista(const tLista* p, const void* d, Cmp comparar)
+{
+    while (*p && comparar(d, (*p)->info))
+        p = &(*p)->sig;
+    if (!*p)
+        return NULL;
+    return (tLista*)p;
+}
+
+int buscarElemLista(const tLista* p, void* d, unsigned cantBytes, Cmp comparar)
+{
+    if (!(p = buscarNodoLista(p, d, comparar)))
+        return 0;
+    memcpy(d, (*p)->info, MINIMO((*p)->tamInfo, cantBytes));
+    return 1;
+}
+
+int aplicarEnElemLista(tLista* p, const void* clave, Cmp comparar, void* params, Accion accion)
+{
+    if (!(p = buscarNodoLista(p, clave, comparar)))
+        return 0;
+    if (accion)
+        accion((*p)->info, (*p)->tamInfo, 0, params);
+    return 1;
+}
