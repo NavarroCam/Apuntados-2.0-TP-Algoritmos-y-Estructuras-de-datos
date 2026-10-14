@@ -1,45 +1,13 @@
 #ifndef ESCENARIO_H_INCLUDED
 #define ESCENARIO_H_INCLUDED
+#include "puerto.h"
 
-#include "comun.h"
-#include "cola.h"
-#include "config.h"
-
-#define RUTA_ESCENARIO "Archivos/puerto.txt"
-#define TAM_CODIGO          12
-#define MAX_CONT_POR_BUQUE         40u
-
-
-typedef struct
-{
-    char codigo[TAM_CODIGO];
-    unsigned minutoLlegada;
-    unsigned cantidadContenedores;
-    char manifiesto[MAX_CONT_POR_BUQUE][TAM_CODIGO];
-} tBuqueEscenario;
-
-typedef struct
-{
-    char codigo[TAM_CODIGO];
-    unsigned minutoLlegada;
-    char contenedorSolicitado[TAM_CODIGO];
-} tCamionEscenario;
-
-typedef struct
-{
-    unsigned duracionJornadaMinutos;
-    unsigned cantidadMuelles;
-    unsigned cantidadZonas;
-    unsigned capacidadPila;
-    tCola buques;
-    tCola camiones;
-    unsigned cantidadBuques;
-    unsigned cantidadCamiones;
-} tEscenario;
-
-int generarEscenario(const tConfiguracion *config, const char *nomArch);
-int leerEscenario(tEscenario *esc, const char *nomArch);
-void liberarEscenario(tEscenario *esc);
-
+/*Genera puerto .txt al azar a partir de la configuracion. Con ModoTest en 1 no lo regenera si ya existe.
+ Con semilla de 0 reinicia rand() con ella, de modo que siempre genera el mismo archivo; con 0 usa la semilla que el llamador inicializo con srand.
+ Devuelve 1 si todo salio bien y 0 ante cualquier error.
+ */
+int generarEscenario(const char *path, const tConfig *config, int modoTest, unsigned semilla);
+/* Carga el escenario en el estado, que debe estar recien creado con crearEstadoSimulacion. Devuelve 1 si todo salio bien y 0 si no.*/
+int cargarEscenario(const char *path, tEstadoSimulacion *estado);
 
 #endif // ESCENARIO_H_INCLUDED

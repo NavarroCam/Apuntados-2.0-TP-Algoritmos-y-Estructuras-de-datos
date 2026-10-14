@@ -135,18 +135,41 @@ int mostrarLista(const tLista* p, Mostrar mostrar, FILE* pf)
     }
     return 1;
 }
-int insertarEnOrden(tLista *pLista, const void *dato, unsigned cantBytes, tCmpLista cmp)
-{
-    tNodo  *nuevo;
 
-    while(*pLista != NULL && cmp((*pLista)->info, dato) <= 0)
-        pLista = &(*pLista)->sig;
-    if(!reservarMemoriaNodo(nuevo, sizeof(tNodo), nuevo->info, cantBytes))
+void _map(tLista *p, void *params, Accion accion)
+{
+    unsigned n = 0;
+
+    while (*p)
+    {
+        accion((*p)->info, (*p)->tamInfo, n, params);
+        p = &(*p)->sig;
+        n++;
+    }
+}
+
+tLista* buscarNodoLista(const tLista* p, const void* d, Cmp comparar)
+{
+    while (*p && comparar(d, (*p)->info))
+        p = &(*p)->sig;
+    if (!*p)
+        return NULL;
+    return (tLista*)p;
+}
+
+int buscarElemLista(const tLista* p, void* d, unsigned cantBytes, Cmp comparar)
+{
+    if (!(p = buscarNodoLista(p, d, comparar)))
         return 0;
-    memcpy(nuevo->info, dato, cantBytes);
-    nuevo->tamInfo = cantBytes;
-    nuevo->sig = *pLista;
-    *pLista = nuevo;
+    memcpy(d, (*p)->info, MINIMO((*p)->tamInfo, cantBytes));
     return 1;
 }
 
+int aplicarEnElemLista(tLista* p, const void* clave, Cmp comparar, void* params, Accion accion)
+{
+    if (!(p = buscarNodoLista(p, clave, comparar)))
+        return 0;
+    if (accion)
+        accion((*p)->info, (*p)->tamInfo, 0, params);
+    return 1;
+}

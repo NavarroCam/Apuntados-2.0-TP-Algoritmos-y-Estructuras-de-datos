@@ -21,4 +21,8 @@ void vaciarLista(tLista *p);
 int mostrarLista(const tLista *p, Mostrar mostrar, FILE* pf);
 int insertarEnOrden(tLista *pLista, const void *dato, unsigned cantBytes, tCmpLista cmp);
 
+void _map(tLista *p, void *params, Accion accion);
+tLista* buscarNodoLista(const tLista* p, const void* d, Cmp comparar);
+int buscarElemLista(const tLista* p, void* d, unsigned cantBytes, Cmp comparar);
+int aplicarEnElemLista(tLista* p, const void* clave, Cmp comparar, void* params, Accion accion);
 #endif // LISTA_H_INCLUDED
