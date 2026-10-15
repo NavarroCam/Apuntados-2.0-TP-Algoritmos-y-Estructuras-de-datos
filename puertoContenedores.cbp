@@ -35,8 +35,13 @@
 		<Unit filename="include/cola.h" />
 		<Unit filename="include/comun.h" />
 		<Unit filename="include/config.h" />
+		<Unit filename="include/escenario.h" />
 		<Unit filename="include/lista.h" />
+		<Unit filename="include/operadores.h" />
+		<Unit filename="include/pantalla.h" />
 		<Unit filename="include/pila.h" />
+		<Unit filename="include/puerto.h" />
+		<Unit filename="include/simulacion.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -52,10 +57,25 @@
 		<Unit filename="src/config.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/escenario.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/lista.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/operadores.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pantalla.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/pila.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/puerto.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/simulacion.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions />

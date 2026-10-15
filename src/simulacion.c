@@ -289,3 +289,35 @@ void jugarJornada(tEstadoSimulacion *e)
     }
     mostrarResumen(e, motivo);
 }
+
+void nuevaJornada(unsigned posicion, const char *nombre)
+{
+    tConfig config;
+    tEstadoSimulacion estado;
+
+    mostrarTitulo("NUEVA JORNADA", AZUL);
+    if (TEST)
+        printf("%s  MODO TEST: se usa %s sin regenerarlo (solo se genera si no existe)%s\n",
+               MAGENTA, PATH_PUERTO, RESET);
+    if (cargarConfiguracion(&config, PATH_CONFIG) != TODO_BIEN || !generarEscenario(PATH_PUERTO, &config, TEST, SEMILLA))
+    {
+        printf("%s  Error: %s no se pudo generar o supera los maximos, o no se pudo generar %s%s\n",
+               ROJO, PATH_CONFIG, PATH_PUERTO, RESET);
+        return;
+    }
+    mostrarConfiguracion(&config);
+    printf("\n");
+    pausarPantalla();
+    limpiarPantalla();
+    mostrarTitulo("JORNADA EN CURSO", AZUL);
+    crearEstadoSimulacion(&estado, &config);
+    if (!cargarEscenario(PATH_PUERTO, &estado))
+        printf("%s  Error: %s tiene un formato invalido%s\n", ROJO, PATH_PUERTO, RESET);
+    else
+    {
+        jugarJornada(&estado);
+        if (!registrarJornada(posicion, nombre, &estado))
+            printf("%s  Error: no se pudo registrar la jornada%s\n", ROJO, RESET);
+    }
+    vaciarEstadoSimulacion(&estado);
+}

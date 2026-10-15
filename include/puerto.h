@@ -6,6 +6,7 @@
 #include "cola.h"
 #include "lista.h"
 #include "config.h"
+#include "pantalla.h"
 
 #define TAM_CODIGO      8
 #define TAM_OPERACION   4
