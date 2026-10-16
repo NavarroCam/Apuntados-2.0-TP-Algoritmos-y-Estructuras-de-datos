@@ -20,16 +20,6 @@
         free(X), 0 : 1                              \
 )
 
-#define PATH_CONFIG "Archivos/config.txt"
-#define PATH_PUERTO "Archivos/puerto.txt"
-#define TITULO      "PUERTO DE CONTENEDORES - OPERACION CONTRARRELOJ"
-
-/* Pruebas: TEST en 1 juega con el puerto.txt existente sin regenerarlo.
-   SEMILLA distinta de 0 hace que cada jornada genere siempre el mismo
-   puerto.txt; en 0 cada jornada es aleatoria. Para la entrega: 0 y 0. */
-#define TEST        1
-#define SEMILLA     0
-
 typedef struct sNodo
 {
     void           *info;

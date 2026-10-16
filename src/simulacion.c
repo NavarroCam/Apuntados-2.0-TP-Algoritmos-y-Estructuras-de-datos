@@ -15,17 +15,18 @@ void avanzarReloj(tEstadoSimulacion *e, unsigned hasta)
     e->reloj = hasta;
     while (verPrimeroCola(&e->arribosBuques, &buque, sizeof(tBuque)) && buque.llegada <= hasta)
     {
-        printf("  [T=%u] arriba %s\n", buque.llegada, buque.codigo);
+        printf("  %s[T=%u]%s arriba el buque %s%s%s\n", GRIS, buque.llegada, RESET, NEGRITA, buque.codigo, RESET);
         sacarDeCola(&e->arribosBuques, &buque, sizeof(tBuque));
         ponerEnCola(&e->esperaBuques, &buque, sizeof(tBuque));
     }
     while (verPrimeroCola(&e->arribosCamiones, &camion, sizeof(tCamion)) && camion.llegada <= hasta)
     {
-        printf("  [T=%u] arriba %s (solicita %s)\n", camion.llegada, camion.codigo, camion.contenedor);
+        printf("  %s[T=%u]%s arriba el camion %s%s%s (solicita %s%s%s)\n", GRIS, camion.llegada, RESET,
+               NEGRITA, camion.codigo, RESET, AMARILLO, camion.contenedor, RESET);
         sacarDeCola(&e->arribosCamiones, &camion, sizeof(tCamion));
         ponerEnCola(&e->colaCamiones, &camion, sizeof(tCamion));
     }
-    _map(&e->muelles, &e->esperaBuques, asignarMuelle);
+    map(&e->muelles, &e->esperaBuques, asignarMuelle);
 }
 
 int hayTiempo(const tEstadoSimulacion *e, unsigned duracion)
@@ -75,10 +76,11 @@ const char *descargar(tEstadoSimulacion *e, unsigned idMuelle, unsigned idZona)
         return SIN_MEMORIA;
 
     aplicarEnElemLista(&e->muelles, &muelle, compararId, &mov, descargarDelMuelle);
-    printf("  Descarga de %s desde %s (M%u) hacia Z%u\n", mov.cont.codigo, muelle.buque.codigo, idMuelle, idZona);
+    printf("  Descarga de %s%s%s desde %s (M%u) hacia Z%u\n", AMARILLO, mov.cont.codigo, RESET,
+           muelle.buque.codigo, idMuelle, idZona);
     if (mov.ok)
     {
-        printf("  %s completa su descarga (+5 puntos) y libera M%u\n", muelle.buque.codigo, idMuelle);
+        printf("  %s%s completa su descarga (+5 puntos) y libera M%u%s\n", VERDE, muelle.buque.codigo, idMuelle, RESET);
         e->puntaje += 5;
         e->buquesDescargados++;
     }
@@ -114,7 +116,7 @@ const char *reubicar(tEstadoSimulacion *e, unsigned idOrigen, unsigned idDestino
 
     aplicarEnElemLista(&e->zonas, &origen, compararId, &mov, desapilarDeZona);
     e->reorganizaciones++;
-    printf("  Reubicacion de %s desde Z%u hacia Z%u\n", mov.cont.codigo, idOrigen, idDestino);
+    printf("  Reubicacion de %s%s%s desde Z%u hacia Z%u\n", AMARILLO, mov.cont.codigo, RESET, idOrigen, idDestino);
     sprintf(descripcion, "REU %s Z%u Z%u", mov.cont.codigo, idOrigen, idDestino);
     completarOperacion(e, e->config.tiempoReubicacionContenedor, descripcion);
     return NULL;
@@ -138,7 +140,8 @@ const char *entregar(tEstadoSimulacion *e)
     sacarDeCola(&e->colaCamiones, &camion, sizeof(tCamion));
     e->puntaje += 10;
     e->contenedoresEntregados++;
-    printf("  %s retira %s desde Z%u (+10 puntos) y abandona el puerto\n", camion.codigo, mov.cont.codigo, mov.idZona);
+    printf("  %s%s retira %s desde Z%u (+10 puntos) y abandona el puerto%s\n", VERDE, camion.codigo,
+           mov.cont.codigo, mov.idZona, RESET);
     sprintf(descripcion, "ENT %s Z%u %s", mov.cont.codigo, mov.idZona, camion.codigo);
     completarOperacion(e, e->config.tiempoCargaCamion, descripcion);
     return NULL;
@@ -149,11 +152,18 @@ void mostrarEstado(tEstadoSimulacion *e)
     unsigned esperando = 0;
 
     verCola(&e->esperaBuques, sizeof(tBuque), &esperando, contarElementos);
-    printf("\nT=%u de %u | puntaje provisorio: %d | buques esperando muelle: %u\n",
-           e->reloj, e->config.duracionJornadaMinutos, e->puntaje, esperando);
-    _map(&e->muelles, NULL, mostrarMuelle);
-    _map(&e->zonas, NULL, mostrarZona);
-    printf("  Cola de camiones:%s\n", colaVacia(&e->colaCamiones) ? " vacia" : "");
+    printf("\n");
+    mostrarBorde('=', AZUL);
+    printf("  %sT=%u%s de %u   |   puntaje provisorio: %s%d%s   |   buques esperando: %u\n",
+           NEGRITA, e->reloj, RESET, e->config.duracionJornadaMinutos, VERDE, e->puntaje, RESET, esperando);
+    mostrarBorde('=', AZUL);
+    mostrarSeccion("MUELLES");
+    map(&e->muelles, NULL, mostrarMuelle);
+    mostrarSeccion("ZONAS (tope a la izquierda)");
+    map(&e->zonas, NULL, mostrarZona);
+    mostrarSeccion("CAMIONES");
+    if (colaVacia(&e->colaCamiones))
+        printf("  %s(sin camiones esperando)%s\n", GRIS, RESET);
     verCola(&e->colaCamiones, sizeof(tCamion), NULL, mostrarCamionVentana);
 }
 
@@ -238,14 +248,23 @@ void mostrarResumen(tEstadoSimulacion *e, const char *motivo)
     verCola(&e->colaCamiones, sizeof(tCamion), &e->camionesPendientes, contarElementos);
     penalizacion = 2 * e->camionesPendientes;
     e->puntaje -= penalizacion;
-    printf("\n== FIN DE LA JORNADA: %s ==\n\nHistorial de operaciones:\n", motivo);
-    _map(&e->historial, NULL, mostrarRegistroOperacion);
-    printf("\nRESUMEN\n  Tiempo utilizado: %u min de %u\n", e->reloj, e->config.duracionJornadaMinutos);
-    printf("  Buques descargados: %u -> %u puntos\n", e->buquesDescargados, 5 * e->buquesDescargados);
-    printf("  Contenedores entregados: %u -> %u puntos\n", e->contenedoresEntregados, 10 * e->contenedoresEntregados);
-    printf("  Reorganizaciones: %u\n", e->reorganizaciones);
-    printf("  Camiones pendientes: %u -> %d puntos de penalizacion\n", e->camionesPendientes, penalizacion);
-    printf("  Puntuacion final: %d puntos\n", e->puntaje);
+    printf("\n");
+    mostrarTitulo("FIN DE LA JORNADA", MAGENTA);
+    printf("  Motivo: %s%s%s\n\n", NEGRITA, motivo, RESET);
+    mostrarSeccion("HISTORIAL DE OPERACIONES");
+    map(&e->historial, NULL, mostrarRegistroOperacion);
+    if (listaVacia(&e->historial))
+        printf("  %s(sin operaciones)%s\n", GRIS, RESET);
+    mostrarSeccion("RESUMEN");
+    printf("  Tiempo utilizado ........... %u min de %u\n", e->reloj, e->config.duracionJornadaMinutos);
+    printf("  Buques descargados ......... %u  %s(+%u puntos)%s\n", e->buquesDescargados, VERDE, 5 * e->buquesDescargados, RESET);
+    printf("  Contenedores entregados .... %u  %s(+%u puntos)%s\n", e->contenedoresEntregados, VERDE,
+           10 * e->contenedoresEntregados, RESET);
+    printf("  Reorganizaciones ........... %u\n", e->reorganizaciones);
+    printf("  Camiones pendientes ........ %u  %s(-%d puntos)%s\n", e->camionesPendientes, ROJO, penalizacion, RESET);
+    mostrarBorde('-', GRIS);
+    printf("  %sPUNTUACION FINAL: %d puntos%s\n", NEGRITA, e->puntaje, RESET);
+    mostrarBorde('-', GRIS);
 }
 
 /* En cada vuelta se cuentan zonas y muelles una sola vez y con eso se evalua
@@ -257,13 +276,14 @@ void jugarJornada(tEstadoSimulacion *e)
     unsigned relojMostrado = e->config.duracionJornadaMinutos + 1;
     tRecursos r, sinRecursos = {0, 0, 0, 0, 0};
 
-    printf("\n== INICIO DE LA JORNADA (comandos: DES, REU, ENT, VER, ESP) ==\n");
+    printf("\n");
+    mostrarSeccion("INICIO DE LA JORNADA - comandos: DES, REU, ENT, VER, ESP");
     avanzarReloj(e, 0);
     while (!motivo)
     {
         r = sinRecursos;
-        _map(&e->zonas, &r, contarZona);
-        _map(&e->muelles, &r, contarMuelle);
+        map(&e->zonas, &r, contarZona);
+        map(&e->muelles, &r, contarMuelle);
         if (finalizacionNormal(e, &r))
             motivo = "finalizacion normal";
         else if (e->reloj >= e->config.duracionJornadaMinutos)
@@ -273,51 +293,19 @@ void jugarJornada(tEstadoSimulacion *e)
             if (e->reloj != relojMostrado)
                 mostrarEstado(e);
             relojMostrado = e->reloj;
-            printf("OPERADOR> ");
+            printf("%s%sOPERADOR>%s ", NEGRITA, AZUL, RESET);
             if (!fgets(linea, sizeof(linea), stdin))
                 motivo = "fin de la entrada";
             else if ((error = ejecutarOrden(e, linea)) != NULL)
-                printf("  Orden rechazada: %s\n", error);
+                printf("  %sOrden rechazada: %s%s\n", ROJO, error, RESET);
         }
         else if (!colaVacia(&e->arribosBuques) || !colaVacia(&e->arribosCamiones))
         {
-            printf("  Sin operaciones validas en T=%u: avance automatico\n", e->reloj);
+            printf("  %sSin operaciones validas en T=%u: avance automatico%s\n", GRIS, e->reloj, RESET);
             avanzarReloj(e, proximoEvento(e));
         }
         else
             motivo = "bloqueo operativo";
     }
     mostrarResumen(e, motivo);
-}
-
-void nuevaJornada(unsigned posicion, const char *nombre)
-{
-    tConfig config;
-    tEstadoSimulacion estado;
-
-    mostrarTitulo("NUEVA JORNADA", AZUL);
-    if (TEST)
-        printf("%s  MODO TEST: se usa %s sin regenerarlo (solo se genera si no existe)%s\n",
-               MAGENTA, PATH_PUERTO, RESET);
-    if (cargarConfiguracion(&config, PATH_CONFIG) != TODO_BIEN || !generarEscenario(PATH_PUERTO, &config, TEST, SEMILLA))
-    {
-        printf("%s  Error: %s no se pudo generar o supera los maximos, o no se pudo generar %s%s\n",
-               ROJO, PATH_CONFIG, PATH_PUERTO, RESET);
-        return;
-    }
-    mostrarConfiguracion(&config);
-    printf("\n");
-    pausarPantalla();
-    limpiarPantalla();
-    mostrarTitulo("JORNADA EN CURSO", AZUL);
-    crearEstadoSimulacion(&estado, &config);
-    if (!cargarEscenario(PATH_PUERTO, &estado))
-        printf("%s  Error: %s tiene un formato invalido%s\n", ROJO, PATH_PUERTO, RESET);
-    else
-    {
-        jugarJornada(&estado);
-        if (!registrarJornada(posicion, nombre, &estado))
-            printf("%s  Error: no se pudo registrar la jornada%s\n", ROJO, RESET);
-    }
-    vaciarEstadoSimulacion(&estado);
 }

@@ -198,7 +198,7 @@ int cargarDesdeDatosOrdenadosRec(tArbolBinBusq *p, void *ds, unsigned (*leer)(vo
     return cargarDesdeDatosOrdenadosRec(&(*p)->der, ds, leer, m + 1, ls, params);
 }
 
-int cargarArchivoBinOrdenadoAbiertoArbolBinBusq(tArbolBinBusq *p, FILE *pf, unsigned tamlnfo)
+int cargarArchivoBinOrdenadoAbiertoArb01BinBusq(tArbolBinBusq *p, FILE *pf, unsigned tamlnfo)
 {
     int cantReg;
 
@@ -305,14 +305,13 @@ int esAVLArbolBin(const tArbolBinBusq *p)
     return esAVLArbolBin(&(*p)->izq) && esAVLArbolBin(&(*p)->der);
 }
 
-void vaciarArbolBinBusq(tArbolBinBusq* p)
+void vaciarArbolBinBusq(tArbolBinBusq *p)
 {
-    if ((*p)!=NULL)
-    {
-        vaciarArbolBinBusq(&(*p)->izq);
-        vaciarArbolBinBusq(&(*p)->der);
-        free((*p)->info);
-        free(*p);
-        (*p)=NULL;
-    }
+    if(*p == NULL)
+        return;
+    vaciarArbolBinBusq(&(*p)->izq);
+    vaciarArbolBinBusq(&(*p)->der);
+    free((*p)->info);
+    free(*p);
+    *p = NULL;
 }

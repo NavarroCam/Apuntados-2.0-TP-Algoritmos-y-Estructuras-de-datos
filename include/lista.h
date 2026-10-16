@@ -18,9 +18,8 @@ int verPrimeroLista(tLista *p, void *d, unsigned cantBytes);
 int verUltimoLista(tLista *p, void *d, unsigned cantBytes);
 void vaciarLista(tLista *p);
 int mostrarLista(const tLista *p, Mostrar mostrar, FILE* pf);
+void map(tLista *p, void *params, Accion accion);
+int buscarElemLista(const tLista *p, void *d, unsigned cantBytes, Cmp comparar);
+int aplicarEnElemLista(tLista *p, const void *clave, Cmp comparar, void *params, Accion accion);
 
-void _map(tLista *p, void *params, Accion accion);
-tLista* buscarNodoLista(const tLista* p, const void* d, Cmp comparar);
-int buscarElemLista(const tLista* p, void* d, unsigned cantBytes, Cmp comparar);
-int aplicarEnElemLista(tLista* p, const void* clave, Cmp comparar, void* params, Accion accion);
 #endif // LISTA_H_INCLUDED

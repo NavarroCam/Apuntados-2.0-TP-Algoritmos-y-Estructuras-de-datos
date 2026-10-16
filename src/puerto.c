@@ -63,8 +63,8 @@ void vaciarEstadoSimulacion(tEstadoSimulacion *estado)
     vaciarCola(&estado->esperaBuques);
     vaciarCola(&estado->arribosCamiones);
     vaciarCola(&estado->colaCamiones);
-    _map(&estado->muelles, NULL, vaciarMuelle);
-    _map(&estado->zonas, NULL, vaciarZona);
+    map(&estado->muelles, NULL, vaciarMuelle);
+    map(&estado->zonas, NULL, vaciarZona);
     vaciarLista(&estado->muelles);
     vaciarLista(&estado->zonas);
     vaciarLista(&estado->historial);
@@ -117,15 +117,16 @@ void mostrarZona(void *info, unsigned tamInfo, unsigned n, void *params)
     tContenedor cont;
 
     crearPila(&aux);
-    printf("  Z%u:[", zona->id);
+    printf("  %sZ%u%s:[", CIAN, zona->id, RESET);
     while (sacarDePila(&zona->pila, &cont, sizeof(tContenedor)))
     {
-        printf("%s%s", pilaVacia(&aux) ? "" : "|", cont.codigo);
+        printf("%s%s%s%s", pilaVacia(&aux) ? "" : "|", AMARILLO, cont.codigo, RESET);
         ponerEnPila(&aux, &cont, sizeof(tContenedor));
     }
     while (sacarDePila(&aux, &cont, sizeof(tContenedor)))
         ponerEnPila(&zona->pila, &cont, sizeof(tContenedor));
-    printf("] (%u/%u)\n", zona->cantidad, zona->capacidad);
+    printf("] %s(%u/%u)%s\n", zona->cantidad < zona->capacidad ? GRIS : ROJO,
+           zona->cantidad, zona->capacidad, RESET);
 }
 
 void mostrarMuelle(void *info, unsigned tamInfo, unsigned n, void *params)
@@ -134,17 +135,18 @@ void mostrarMuelle(void *info, unsigned tamInfo, unsigned n, void *params)
     tContenedor proximo;
 
     if (muelle->ocupado && verPrimeroCola(&muelle->buque.manifiesto, &proximo, sizeof(tContenedor)))
-        printf("  M%u: %s -> proximo contenedor %s\n", muelle->id, muelle->buque.codigo, proximo.codigo);
+        printf("  %sM%u%s: %s%s%s -> proximo contenedor %s%s%s\n", CIAN, muelle->id, RESET,
+               NEGRITA, muelle->buque.codigo, RESET, AMARILLO, proximo.codigo, RESET);
     else
-        printf("  M%u: %s (libre)\n", muelle->id, RECURSO_VACIO);
+        printf("  %sM%u%s: %s%s (libre)%s\n", CIAN, muelle->id, RESET, GRIS, RECURSO_VACIO, RESET);
 }
 
 void mostrarRegistroOperacion(void *info, unsigned tamInfo, unsigned n, void *params)
 {
     tRegistroOperacion *reg = info;
 
-    printf("  %3u) T=%-4u T=%-4u %-4s %-8s %-6s -> %s\n", n + 1, reg->inicio, reg->fin,
-           reg->operacion, reg->contenedor, reg->origen, reg->destino);
+    printf("  %3u) T=%-4u T=%-4u %s%-4s%s %-8s %-6s -> %s\n", n + 1, reg->inicio, reg->fin,
+           AZUL, reg->operacion, RESET, reg->contenedor, reg->origen, reg->destino);
 }
 
 void mostrarCamionVentana(void *info, unsigned tamInfo, unsigned n, void *params)
@@ -152,8 +154,8 @@ void mostrarCamionVentana(void *info, unsigned tamInfo, unsigned n, void *params
     tCamion *camion = info;
 
     if (n < 3)
-        printf("  %u) %s -> solicita %s%s\n", n + 1, camion->codigo, camion->contenedor,
-               n == 0 ? "   <- frente" : "");
+        printf("  %u) %s%s%s -> solicita %s%s%s%s\n", n + 1, NEGRITA, camion->codigo, RESET,
+               AMARILLO, camion->contenedor, RESET, n == 0 ? VERDE "   <- frente" RESET : "");
 }
 
 void contarElementos(void *info, unsigned tamInfo, unsigned n, void *params)
@@ -189,7 +191,7 @@ void asignarMuelle(void *info, unsigned tamInfo, unsigned n, void *params)
     if (!muelle->ocupado && sacarDeCola(params, &muelle->buque, sizeof(tBuque)))
     {
         muelle->ocupado = 1;
-        printf("  %s atraca en M%u\n", muelle->buque.codigo, muelle->id);
+        printf("  %s>> %s atraca en M%u%s\n", CIAN, muelle->buque.codigo, muelle->id, RESET);
     }
 }
 

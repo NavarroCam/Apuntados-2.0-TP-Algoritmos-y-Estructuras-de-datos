@@ -64,9 +64,9 @@ int ponerEnOrden(tLista* p, const void* d, unsigned cantBytes,
 {
     tNodo *nue;
 
-    while (*p && comparar((*p)->info, d) < 0)
+    while (*p && comparar(d, (*p)->info) > 0)
         p = &(*p)->sig;
-    if(*p && comparar((*p)->info, d) == 0)
+    if(*p && comparar(d, (*p)->info) == 0)
     {
         if(acumular)
             if(!acumular(&(*p)->info, &(*p)->tamInfo, d, cantBytes))
@@ -136,7 +136,7 @@ int mostrarLista(const tLista* p, Mostrar mostrar, FILE* pf)
     return 1;
 }
 
-void _map(tLista *p, void *params, Accion accion)
+void map(tLista* p, void* params, Accion accion)
 {
     unsigned n = 0;
 
@@ -148,13 +148,13 @@ void _map(tLista *p, void *params, Accion accion)
     }
 }
 
-tLista* buscarNodoLista(const tLista* p, const void* d, Cmp comparar)
+tNodo** buscarNodoLista(const tLista* p, const void* d, Cmp comparar)
 {
     while (*p && comparar(d, (*p)->info))
         p = &(*p)->sig;
     if (!*p)
         return NULL;
-    return (tLista*)p;
+    return (tNodo**)p;
 }
 
 int buscarElemLista(const tLista* p, void* d, unsigned cantBytes, Cmp comparar)
@@ -165,6 +165,8 @@ int buscarElemLista(const tLista* p, void* d, unsigned cantBytes, Cmp comparar)
     return 1;
 }
 
+/* Aplica la accion al primer elemento que coincide con la clave, en su lugar.
+   Con accion NULL solo informa si existe. */
 int aplicarEnElemLista(tLista* p, const void* clave, Cmp comparar, void* params, Accion accion)
 {
     if (!(p = buscarNodoLista(p, clave, comparar)))

@@ -1,4 +1,5 @@
 #include "../include/config.h"
+#include "../include/pantalla.h"
 
 #define TAM_LINEA_CONFIG    128
 #define MAX_DIGITOS         9
@@ -157,8 +158,7 @@ int guardarConfiguracion(const tConfig *config, const char *nomArch)
 
 void mostrarConfiguracion(const tConfig *config)
 {
-    printf("\n  PARAMETROS DE LA JORNADA\n");
-    printf("  ------------------------------------------------------\n");
+    mostrarSeccion("PARAMETROS DE LA JORNADA");
     printf("  Duracion de la jornada .............. %u minutos\n", config->duracionJornadaMinutos);
     printf("  Muelles ............................. %u\n", config->cantidadMuelles);
     printf("  Zonas de almacenamiento ............. %u\n", config->cantidadZonasAlmacenamiento);
@@ -169,5 +169,4 @@ void mostrarConfiguracion(const tConfig *config)
     printf("  Tiempo de descarga .................. %u minuto(s)\n", config->tiempoDescargaContenedor);
     printf("  Tiempo de reubicacion ............... %u minuto(s)\n", config->tiempoReubicacionContenedor);
     printf("  Tiempo de carga de camion ........... %u minuto(s)\n", config->tiempoCargaCamion);
-    printf("  ------------------------------------------------------\n");
 }

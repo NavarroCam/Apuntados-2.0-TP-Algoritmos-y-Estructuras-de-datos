@@ -56,18 +56,3 @@ int esperarEnter(void)
     printf("\n%s  Presione ENTER para volver al menu...%s", GRIS, RESET);
     return fgets(linea, sizeof(linea), stdin) != NULL;
 }
-
-void mostrarMenuPrincipal(const char *nombre, const char *aviso)
-{
-    limpiarPantalla();
-    mostrarTitulo(TITULO, CIAN);
-    printf("\n  Operador: %s%s%s\n\n", NEGRITA, nombre, RESET);
-    mostrarBorde('-', GRIS);
-    printf("    %s[1]%s Iniciar nueva jornada\n", AMARILLO, RESET);
-    printf("    %s[2]%s Ver ranking de operadores\n", AMARILLO, RESET);
-    printf("    %s[3]%s Salir\n", AMARILLO, RESET);
-    mostrarBorde('-', GRIS);
-    if (aviso)
-        printf("  %s\n", aviso);
-    printf("\n  %sOpcion:%s ", NEGRITA, RESET);
-}

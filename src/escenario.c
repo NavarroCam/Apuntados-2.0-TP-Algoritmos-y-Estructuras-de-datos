@@ -1,16 +1,21 @@
 #include "../include/escenario.h"
 
-#define MULTIPLICADOR_CONTENEDOR 100
-/* Entero al azar en [0, n). Combina dos llamadas a rand() porque RAND_MAX puede ser 32767 y la cantidad de contenedores puede superarlo. */
+#define MULTIPLICADOR_CONTENEDOR    100
+
+/* Entero al azar en [0, n). Combina dos llamadas a rand() porque RAND_MAX
+   puede ser 32767 y la cantidad de contenedores puede superarlo. */
 unsigned numeroAleatorio(unsigned n)
 {
     unsigned long r = rand();
+
     r = r * (RAND_MAX + 1UL) + rand();
     return r % n;
 }
 
-/* Cantidades al azar dentro de los maximos de config.txt. Las llegadas se generan crecientes (archivo ordenado por T) y con salto = (duracion - 1) /
-   cantidad nunca superan la jornada. Cada camion pide un contenedor distinto,elegido con Fisher-Yates parcial sobre los codigos generados. */
+/* Cantidades al azar dentro de los maximos de config.txt. Las llegadas se
+   generan crecientes (archivo ordenado por T) y con salto = (duracion - 1) /
+   cantidad nunca superan la jornada. Cada camion pide un contenedor distinto,
+   elegido con Fisher-Yates parcial sobre los codigos generados. */
 int generarEscenario(const char *path, const tConfig *c, int modoTest, unsigned semilla)
 {
     unsigned *codigos, *fin, *actual, *elegido;
@@ -115,8 +120,7 @@ int cargarEscenario(const char *path, tEstadoSimulacion *e)
     if (!pf)
         return 0;
     ok = fscanf(pf, " JORNADA:%u MUELLES:%u ZONAS:%u CAPACIDAD_PILA:%u [BUQUES]%n",
-                &jornada, &muelles, &zonas, &capacidad, &fin) == 4 &&
-         fin &&
+                &jornada, &muelles, &zonas, &capacidad, &fin) == 4 && fin &&
          jornada == c->duracionJornadaMinutos && muelles == c->cantidadMuelles &&
          zonas == c->cantidadZonasAlmacenamiento && capacidad == c->capacidadPila;
     for (i = 1; ok && i <= muelles; i++)
