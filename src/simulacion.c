@@ -80,8 +80,8 @@ const char *descargar(tEstadoSimulacion *e, unsigned idMuelle, unsigned idZona)
            muelle.buque.codigo, idMuelle, idZona);
     if (mov.ok)
     {
-        printf("  %s%s completa su descarga (+5 puntos) y libera M%u%s\n", VERDE, muelle.buque.codigo, idMuelle, RESET);
-        e->puntaje += 5;
+        printf("  %s%s completa su descarga (+%d puntos) y libera M%u%s\n", VERDE, muelle.buque.codigo, PTS_BUQUE_DESC, idMuelle, RESET);
+        e->puntaje += PTS_BUQUE_DESC;
         e->buquesDescargados++;
     }
     sprintf(descripcion, "DES %s M%u Z%u", mov.cont.codigo, idMuelle, idZona);
@@ -138,12 +138,13 @@ const char *entregar(tEstadoSimulacion *e)
 
     aplicarEnElemLista(&e->zonas, &mov.cont, compararContenedorConTopeZona, &mov, desapilarDeZona);
     sacarDeCola(&e->colaCamiones, &camion, sizeof(tCamion));
-    e->puntaje += 10;
+    e->puntaje += PTS_ENTR;
     e->contenedoresEntregados++;
-    printf("  %s%s retira %s desde Z%u (+10 puntos) y abandona el puerto%s\n", VERDE, camion.codigo,
-           mov.cont.codigo, mov.idZona, RESET);
+    printf("  %s%s retira %s desde Z%u (+%d puntos) y abandona el puerto%s\n", VERDE, camion.codigo,
+           mov.cont.codigo, mov.idZona, PTS_ENTR, RESET);
     sprintf(descripcion, "ENT %s Z%u %s", mov.cont.codigo, mov.idZona, camion.codigo);
     completarOperacion(e, e->config.tiempoCargaCamion, descripcion);
+
     return NULL;
 }
 
@@ -246,20 +247,21 @@ void mostrarResumen(tEstadoSimulacion *e, const char *motivo)
     int penalizacion;
 
     verCola(&e->colaCamiones, sizeof(tCamion), &e->camionesPendientes, contarElementos);
-    penalizacion = 2 * e->camionesPendientes;
+    penalizacion = PENAL_CAMION * e->camionesPendientes;
     e->puntaje -= penalizacion;
     printf("\n");
     mostrarTitulo("FIN DE LA JORNADA", MAGENTA);
     printf("  Motivo: %s%s%s\n\n", NEGRITA, motivo, RESET);
     mostrarSeccion("HISTORIAL DE OPERACIONES");
     map(&e->historial, NULL, mostrarRegistroOperacion);
+
     if (listaVacia(&e->historial))
         printf("  %s(sin operaciones)%s\n", GRIS, RESET);
     mostrarSeccion("RESUMEN");
     printf("  Tiempo utilizado ........... %u min de %u\n", e->reloj, e->config.duracionJornadaMinutos);
-    printf("  Buques descargados ......... %u  %s(+%u puntos)%s\n", e->buquesDescargados, VERDE, 5 * e->buquesDescargados, RESET);
+    printf("  Buques descargados ......... %u  %s(+%u puntos)%s\n", e->buquesDescargados, VERDE, PTS_BUQUE_DESC * e->buquesDescargados, RESET);
     printf("  Contenedores entregados .... %u  %s(+%u puntos)%s\n", e->contenedoresEntregados, VERDE,
-           10 * e->contenedoresEntregados, RESET);
+           PTS_ENTR * e->contenedoresEntregados, RESET);
     printf("  Reorganizaciones ........... %u\n", e->reorganizaciones);
     printf("  Camiones pendientes ........ %u  %s(-%d puntos)%s\n", e->camionesPendientes, ROJO, penalizacion, RESET);
     mostrarBorde('-', GRIS);
