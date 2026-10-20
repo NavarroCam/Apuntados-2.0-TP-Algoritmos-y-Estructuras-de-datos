@@ -242,14 +242,16 @@ unsigned proximoEvento(const tEstadoSimulacion *e)
     return t;
 }
 
+void aplicarPenalizacion(tEstadoSimulacion *e)
+{
+    verCola(&e->colaCamiones, sizeof(tCamion), &e->camionesPendientes, contarElementos);
+    e->puntaje -= (int)(PENAL_CAMION * e->camionesPendientes);
+}
+
 void mostrarResumen(tEstadoSimulacion *e, const char *motivo)
 {
-    int penalizacion;
-
-    verCola(&e->colaCamiones, sizeof(tCamion), &e->camionesPendientes, contarElementos);
-    penalizacion = PENAL_CAMION * e->camionesPendientes;
-    e->puntaje -= penalizacion;
     printf("\n");
+
     mostrarTitulo("FIN DE LA JORNADA", MAGENTA);
     printf("  Motivo: %s%s%s\n\n", NEGRITA, motivo, RESET);
     mostrarSeccion("HISTORIAL DE OPERACIONES");
@@ -257,14 +259,16 @@ void mostrarResumen(tEstadoSimulacion *e, const char *motivo)
 
     if (listaVacia(&e->historial))
         printf("  %s(sin operaciones)%s\n", GRIS, RESET);
+
     mostrarSeccion("RESUMEN");
     printf("  Tiempo utilizado ........... %u min de %u\n", e->reloj, e->config.duracionJornadaMinutos);
     printf("  Buques descargados ......... %u  %s(+%u puntos)%s\n", e->buquesDescargados, VERDE, PTS_BUQUE_DESC * e->buquesDescargados, RESET);
     printf("  Contenedores entregados .... %u  %s(+%u puntos)%s\n", e->contenedoresEntregados, VERDE,
            PTS_ENTR * e->contenedoresEntregados, RESET);
     printf("  Reorganizaciones ........... %u\n", e->reorganizaciones);
-    printf("  Camiones pendientes ........ %u  %s(-%d puntos)%s\n", e->camionesPendientes, ROJO, penalizacion, RESET);
+    printf("  Camiones pendientes ........ %u  %s(-%d puntos)%s\n", e->camionesPendientes, ROJO, PENAL_CAMION * e->camionesPendientes, RESET);
     mostrarBorde('-', GRIS);
+
     printf("  %sPUNTUACION FINAL: %d puntos%s\n", NEGRITA, e->puntaje, RESET);
     mostrarBorde('-', GRIS);
 }
@@ -309,5 +313,7 @@ void jugarJornada(tEstadoSimulacion *e)
         else
             motivo = "bloqueo operativo";
     }
+
+    aplicarPenalizacion(e);
     mostrarResumen(e, motivo);
 }
