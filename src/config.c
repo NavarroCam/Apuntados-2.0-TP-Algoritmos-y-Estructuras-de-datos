@@ -8,12 +8,12 @@ char *recortarCadena(char *cadena)
 {
     char *fin;
 
-    while(*cadena != '\0' && isspace((unsigned char)*cadena))
+    while(*cadena != '\0' && isspace(*cadena))
     {
         cadena++;
     }
     fin = cadena + strlen(cadena);
-    while(fin > cadena && isspace((unsigned char)*(fin - 1)))
+    while(fin > cadena && isspace(*(fin - 1)))
     {
         fin--;
     }
@@ -28,19 +28,18 @@ void convertMinusCadena(char *cadena)
 
     while(*auxCad != '\0')
     {
-        *auxCad = tolower((unsigned char)*auxCad);
+        *auxCad = tolower(*auxCad);
         auxCad++;
     }
 }
 
-/* Hasta MAX_DIGITOS digitos para que atoi no desborde. */
 int esNumeroPos(const char* cad)
 {
     if(*cad == '\0' || strlen(cad) > MAX_DIGITOS)
         return 0;
     while(*cad != '\0')
     {
-        if(!isdigit((unsigned char)*cad))
+        if(!isdigit(*cad))
             return 0;
         cad++;
     }
@@ -105,7 +104,6 @@ int cargarConfiguracion(tConfig *config, const char *nomArch)
     char *cadValor;
     unsigned valor;
 
-    /* Se cargan antes por si algun parametro falta o esta vacio. */
     establecerConfiguracionPorDefecto(config);
 
     pf = fopen(nomArch, "rt");
@@ -114,7 +112,6 @@ int cargarConfiguracion(tConfig *config, const char *nomArch)
 
     while(fgets(linea, TAM_LINEA_CONFIG, pf))
     {
-        /* Busca en la linea el primer ':' o '='. */
         separador = strpbrk(linea, ":=");
         if(separador != NULL)
         {

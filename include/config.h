@@ -3,8 +3,6 @@
 
 #include "comun.h"
 
-/* Limites para que los codigos entren en TAM_CODIGO (B999, K999 y
-   C<buque><nn>, por ejemplo C101 o C99999). */
 #define MAX_RECURSOS                999
 #define MAX_BUQUES                  999
 #define MAX_CAMIONES                999
@@ -24,12 +22,14 @@ typedef struct
     unsigned tiempoCargaCamion;
 } tConfig;
 
-/* Lee config.txt; los parametros que falten quedan con los valores del
-   ejemplo de la consigna y, si el archivo no existe, lo genera con ellos.
-   Devuelve TODO_BIEN, o ERROR_ARCH si no se pudo generar o algun valor
-   supera los maximos. */
 int cargarConfiguracion(tConfig *config, const char *nomArch);
 int guardarConfiguracion(const tConfig *config, const char *nomArch);
 void mostrarConfiguracion(const tConfig *config);
 
-#endif /* CONFIG_H_INCLUDED */
+char *recortarCadena(char *cadena);
+void convertMinusCadena(char *cadena);
+int esNumeroPos(const char* cad);
+void asignarParametro(tConfig *config, const char *clave, unsigned valor);
+void establecerConfiguracionPorDefecto(tConfig *config);
+int configuracionValida(const tConfig *config);
+#endif
