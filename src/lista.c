@@ -164,9 +164,6 @@ int buscarElemLista(const tLista* p, void* d, unsigned cantBytes, Cmp comparar)
     memcpy(d, (*p)->info, MINIMO((*p)->tamInfo, cantBytes));
     return 1;
 }
-
-/* Aplica la accion al primer elemento que coincide con la clave, en su lugar.
-   Con accion NULL solo informa si existe. */
 int aplicarEnElemLista(tLista* p, const void* clave, Cmp comparar, void* params, Accion accion)
 {
     if (!(p = buscarNodoLista(p, clave, comparar)))

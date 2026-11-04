@@ -1,7 +1,5 @@
 #include "../include/pantalla.h"
 
-/* fflush antes de system(): si no, lo que quedo en el buffer de printf se
-   muestra despues del comando. */
 void limpiarPantalla(void)
 {
     fflush(stdout);
@@ -14,7 +12,6 @@ void pausarPantalla(void)
     system("pause");
 }
 
-/* +======...======+ del ancho de la pantalla, en el color indicado. */
 void mostrarBorde(char relleno, const char *color)
 {
     int i;
@@ -25,7 +22,6 @@ void mostrarBorde(char relleno, const char *color)
     printf("+%s\n", RESET);
 }
 
-/* Titulo centrado dentro de una caja. */
 void mostrarTitulo(const char *titulo, const char *color)
 {
     int largo = strlen(titulo);
@@ -37,7 +33,6 @@ void mostrarTitulo(const char *titulo, const char *color)
     mostrarBorde('=', color);
 }
 
-/* Encabezado de una seccion dentro de una pantalla: "-- NOMBRE ------". */
 void mostrarSeccion(const char *nombre)
 {
     int i, largo = strlen(nombre);
@@ -48,7 +43,6 @@ void mostrarSeccion(const char *nombre)
     printf("%s\n", RESET);
 }
 
-/* Devuelve 0 si se termino la entrada. */
 int esperarEnter(void)
 {
     char linea[TAM_LINEA_PANTALLA];

@@ -3,9 +3,6 @@
 
 #include "comun.h"
 
-/* 1: colores con secuencias ANSI (Windows Terminal, terminal de VS Code).
-   0: texto plano, para consolas que muestran las secuencias como caracteres
-   sueltos. El borrado de pantalla usa system("cls") (solo Windows). */
 #define INTERFAZ_ANSI   1
 
 #if INTERFAZ_ANSI

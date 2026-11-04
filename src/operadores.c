@@ -13,7 +13,6 @@ int compararIndices(const void *d1, const void *d2)
     return strcmp(ind1->nombre, ind2->nombre);
 }
 
-/* Mayor puntaje primero; a igual puntaje, por nombre. */
 int compararRanking(const void *d1, const void *d2)
 {
     const tOperador *op1 = d1, *op2 = d2;
@@ -27,8 +26,6 @@ void grabarIndice(void *info, unsigned tamInfo, unsigned n, void *params)
     fwrite(info, tamInfo, 1, params);
 }
 
-/* El recorrido en orden deja el archivo ordenado por nombre, como lo
-   necesita cargarArchivoBinOrdenadoArbolBinBusq. */
 int guardarIndice(tArbolBinBusq *indice)
 {
     FILE *pf = fopen(PATH_INDICE, "wb");
@@ -99,8 +96,6 @@ int registrarJornada(unsigned posicion, const char *nombre, const tEstadoSimulac
     return ok;
 }
 
-/* Lee el registro al que apunta la entrada del indice y lo inserta en el
-   arbol del ranking. */
 void agregarAlRanking(void *info, unsigned tamInfo, unsigned n, void *params)
 {
     tIndiceOperador *entrada = info;
@@ -112,7 +107,6 @@ void agregarAlRanking(void *info, unsigned tamInfo, unsigned n, void *params)
         insertarArbolBinBusq(armado->ranking, &op, sizeof(tOperador), compararRanking);
 }
 
-/* n del recorrido es el nivel del nodo, por eso la posicion se lleva aparte. */
 void mostrarPosicionRanking(void *info, unsigned tamInfo, unsigned n, void *params)
 {
     tOperador *op = info;
@@ -123,8 +117,6 @@ void mostrarPosicionRanking(void *info, unsigned tamInfo, unsigned n, void *para
     (*posicion)++;
 }
 
-/* Accede a los operadores a traves del indice y los ordena por puntaje
-   acumulado en un segundo arbol. */
 void mostrarRanking(tArbolBinBusq *indice)
 {
     tArbolBinBusq ranking;

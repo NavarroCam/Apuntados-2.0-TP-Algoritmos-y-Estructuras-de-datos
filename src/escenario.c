@@ -2,8 +2,6 @@
 
 #define MULTIPLICADOR_CONTENEDOR    100
 
-/* Entero al azar en [0, n). Combina dos llamadas a rand() porque RAND_MAX
-   puede ser 32767 y la cantidad de contenedores puede superarlo. */
 unsigned numeroAleatorio(unsigned n)
 {
     unsigned long r = rand();
@@ -12,10 +10,6 @@ unsigned numeroAleatorio(unsigned n)
     return r % n;
 }
 
-/* Cantidades al azar dentro de los maximos de config.txt. Las llegadas se
-   generan crecientes (archivo ordenado por T) y con salto = (duracion - 1) /
-   cantidad nunca superan la jornada. Cada camion pide un contenedor distinto,
-   elegido con Fisher-Yates parcial sobre los codigos generados. */
 int generarEscenario(const char *path, const tConfig *c, int modoTest, unsigned semilla)
 {
     unsigned *codigos, *fin, *actual, *elegido;
@@ -106,7 +100,6 @@ int cargarCamion(const char *linea, tEstadoSimulacion *e, unsigned *ultimaLlegad
     return ok;
 }
 
-/* La cabecera debe coincidir con config.txt, del que se genero el escenario. */
 int cargarEscenario(const char *path, tEstadoSimulacion *e)
 {
     const tConfig *c = &e->config;

@@ -77,7 +77,6 @@ int compararId(const void *d1, const void *d2)
     return (*id1 > *id2) - (*id1 < *id2);
 }
 
-/* Clave y elemento son de tipos distintos: usar solo con aplicarEnElemLista. */
 int compararContenedorConTopeZona(const void *contenedor, const void *zona)
 {
     const tContenedor *buscado = contenedor;
@@ -89,8 +88,6 @@ int compararContenedorConTopeZona(const void *contenedor, const void *zona)
     return strcmp(buscado->codigo, tope.codigo);
 }
 
-/* Aplica la accion a una copia de cada elemento sin alterar la cola: cada
-   elemento pasa a una cola auxiliar y despues vuelve, en el mismo orden. */
 void verCola(tCola *cola, unsigned tamInfo, void *params, Accion accion)
 {
     tCola aux;
@@ -108,8 +105,6 @@ void verCola(tCola *cola, unsigned tamInfo, void *params, Accion accion)
     free(dato);
 }
 
-/* Muestra Z<id>:[tope|...|fondo] desapilando a una pila auxiliar y volviendo
-   a apilar, de modo que la zona queda igual que antes. */
 void mostrarZona(void *info, unsigned tamInfo, unsigned n, void *params)
 {
     tZona *zona = info;
@@ -214,8 +209,6 @@ void desapilarDeZona(void *info, unsigned tamInfo, unsigned n, void *params)
     mov->idZona = zona->id;
 }
 
-/* Saca el proximo contenedor del manifiesto; si era el ultimo, el buque
-   completa su descarga (mov->ok) y libera el muelle. */
 void descargarDelMuelle(void *info, unsigned tamInfo, unsigned n, void *params)
 {
     tMuelle *muelle = info;
