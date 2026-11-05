@@ -13,6 +13,10 @@
 #define TAM_LINEA       1024
 #define RECURSO_VACIO   "."
 
+#define PTS_ENTR        10
+#define PTS_BUQUE_DESC  5
+#define PENAL_CAMION    2
+
 typedef struct
 {
     char codigo[TAM_CODIGO];

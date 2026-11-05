@@ -137,3 +137,29 @@ void mostrarRanking(tArbolBinBusq *indice)
     recorrerEnOrdenArbolBinBusq(&ranking, &posicion, mostrarPosicionRanking);
     vaciarArbolBinBusq(&ranking);
 }
+
+void normalizarNombreOperario(char* nombre)
+{
+    char* ini = nombre, *fin;
+
+    while(isspace(*ini))
+    {
+        ini++;
+    }
+
+    //if(ini != nombre)
+        //memmove(nombre, inicio, strlen(inicio)+1);
+    fin = nombre + strlen(ini);
+    while(fin > ini && isspace(*(fin-1)))
+    {
+        fin--;
+    }
+    *fin = '\0';
+
+    fin = ini;
+    while(*fin)
+    {
+        *fin = tolower(*fin);
+        fin++;
+    }
+}
