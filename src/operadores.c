@@ -51,16 +51,16 @@ int ingresarOperador(tArbolBinBusq *indice, const char *nombre, unsigned *posici
     if (buscarElemArbolBinBusq(indice, &entrada, sizeof(tIndiceOperador), compararIndices))
     {
         *posicion = entrada.posicion;
-        return OPERADOR_EXISTENTE;
+        return OPERARIO_EXISTENTE;
     }
     if (!(pf = fopen(PATH_OPERADORES, "ab")))
-        return OPERADOR_ERROR;
+        return ERROR_OPERARIO;
     fseek(pf, 0L, SEEK_END);
     *posicion = entrada.posicion = ftell(pf) / sizeof(tOperador);
     ok = fwrite(&op, sizeof(tOperador), 1, pf) == 1;
     ok = fclose(pf) == 0 && ok;
     ok = ok && insertarArbolBinBusq(indice, &entrada, sizeof(tIndiceOperador), compararIndices) == TODO_BIEN;
-    return ok && guardarIndice(indice) ? OPERADOR_NUEVO : OPERADOR_ERROR;
+    return ok && guardarIndice(indice) ? NUEVO_OPERARIO : ERROR_OPERARIO;
 }
 
 int registrarJornada(unsigned posicion, const char *nombre, const tEstadoSimulacion *e)

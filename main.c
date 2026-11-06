@@ -7,10 +7,10 @@
 int main()
 {
     tArbolBinBusq indice;
-    char nombre[TAM_LINEA], opcion[TAM_LINEA];
+    char nombre[TAM_LINEA];
     const char *aviso;
     unsigned posicion;
-    int resultado, salir = 0;
+    int resultado, opc = 0;
 
     srand(time(NULL));
     crearArbolBinBusq(&indice);
@@ -20,37 +20,56 @@ int main()
     do
     {
         printf("\n  %sNombre del operador:%s ", NEGRITA, RESET);
-        if (!fgets(nombre, sizeof(nombre), stdin))
-            salir = 1;
-        else
-        {
+        if (fgets(nombre,sizeof(nombre),stdin))
             normalizarNombreOperario(nombre);
-        }
+        else
+            fprintf(stderr,"%s Error: el nombre no puede estar vacío.%s\n", ROJO,RESET);
     }
-    while (!salir && !*nombre);
+    while (!*nombre);
 
-    resultado = salir ? OPERADOR_ERROR : ingresarOperador(&indice, nombre, &posicion);
-    if (!salir && resultado == OPERADOR_ERROR)
-        printf("%s  Error: no se pudo acceder a los archivos de operadores%s\n", ROJO, RESET);
-    aviso = resultado == OPERADOR_NUEVO ? VERDE "Operador dado de alta." RESET : VERDE "Bienvenido nuevamente." RESET;
-    while (resultado != OPERADOR_ERROR && !salir)
+    if(*nombre)
+    {
+        resultado = ingresarOperador(&indice,nombre,&posicion);
+        if(resultado == ERROR_OPERARIO)
+            fprintf(stderr,"%s  Error: no se pudo acceder a los archivos de operadores%s\n", ROJO, RESET);
+        aviso = (resultado == NUEVO_OPERARIO) ? VERDE "Alta de operario." RESET : VERDE "Bienvenido nuevamente." RESET;
+    }
+
+    while (resultado != ERROR_OPERARIO && opc !=3)
     {
         mostrarMenuPrincipal(nombre, aviso);
         aviso = NULL;
-        if (!fgets(opcion, sizeof(opcion), stdin) || !strcmp(opcion, "3\n"))
-            salir = 1;
-        else if (!strcmp(opcion, "1\n") || !strcmp(opcion, "2\n"))
+        scanf("%d", &opc);
+        fflush(stdin);
+        limpiarPantalla();
+        switch(opc)
         {
-            limpiarPantalla();
-            if (*opcion == '1')
-                nuevaJornada(posicion, nombre,PATH_CONFIG,PATH_PUERTO);
-            else
-                mostrarRanking(&indice);
-            salir = !esperarEnter();
+        case 1:
+        {
+            nuevaJornada(posicion,nombre,PATH_CONFIG,PATH_PUERTO);
+            if(!esperarEnter())
+                opc = 3;
+            break;
         }
-        else
+        case 2:
+        {
+            mostrarRanking(&indice);
+            if(!esperarEnter())
+                opc = 3;
+            break;
+        }
+        case 3:
+        {
+            break;
+        }
+        default:
+        {
             aviso = ROJO "Opcion invalida: elija alguna de las que estan en pantalla." RESET;
+            break;
+        }
+        }
     }
+
     vaciarArbolBinBusq(&indice);
     printf("\n%s  Hasta luego.%s\n", GRIS, RESET);
     return 0;

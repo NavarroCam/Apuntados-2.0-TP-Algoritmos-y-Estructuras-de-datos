@@ -9,9 +9,9 @@
 #define PATH_JORNADAS   "Archivos/jornadas.bin"
 
 #define TAM_NOMBRE          31
-#define OPERADOR_ERROR      0
-#define OPERADOR_EXISTENTE  1
-#define OPERADOR_NUEVO      2
+#define ERROR_OPERARIO      0
+#define OPERARIO_EXISTENTE  1
+#define NUEVO_OPERARIO      2
 
 typedef struct
 {
