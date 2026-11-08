@@ -33,7 +33,8 @@ int guardarIndice(tArbolBinBusq *indice)
     if (!pf)
         return 0;
     recorrerEnOrdenArbolBinBusq(indice, pf, grabarIndice);
-    return fclose(pf) == 0;
+    fclose(pf);
+    return 1;
 }
 
 int ingresarOperador(tArbolBinBusq *indice, const char *nombre, unsigned *posicion)
@@ -41,12 +42,10 @@ int ingresarOperador(tArbolBinBusq *indice, const char *nombre, unsigned *posici
     tIndiceOperador entrada;
     tOperador op;
     FILE *pf;
-    int ok;
 
+    memset(&op, 0, sizeof(tOperador));
     strncpy(op.nombre, nombre, TAM_NOMBRE - 1);
-    *(op.nombre + TAM_NOMBRE - 1) = '\0';
-    op.puntajeAcumulado = 0;
-    op.jornadas = 0;
+    memset(&entrada, 0, sizeof(tIndiceOperador));
     strcpy(entrada.nombre, op.nombre);
     if (buscarElemArbolBinBusq(indice, &entrada, sizeof(tIndiceOperador), compararIndices))
     {
@@ -57,10 +56,10 @@ int ingresarOperador(tArbolBinBusq *indice, const char *nombre, unsigned *posici
         return ERROR_OPERARIO;
     fseek(pf, 0L, SEEK_END);
     *posicion = entrada.posicion = ftell(pf) / sizeof(tOperador);
-    ok = fwrite(&op, sizeof(tOperador), 1, pf) == 1;
-    ok = fclose(pf) == 0 && ok;
-    ok = ok && insertarArbolBinBusq(indice, &entrada, sizeof(tIndiceOperador), compararIndices) == TODO_BIEN;
-    return ok && guardarIndice(indice) ? NUEVO_OPERARIO : ERROR_OPERARIO;
+    fwrite(&op, sizeof(tOperador), 1, pf);
+    fclose(pf);
+    insertarArbolBinBusq(indice, &entrada, sizeof(tIndiceOperador), compararIndices);
+    return guardarIndice(indice) ? NUEVO_OPERARIO : ERROR_OPERARIO;
 }
 
 int registrarJornada(unsigned posicion, const char *nombre, const tEstadoSimulacion *e)
@@ -68,32 +67,30 @@ int registrarJornada(unsigned posicion, const char *nombre, const tEstadoSimulac
     tOperador op;
     tJornada jornada;
     FILE *pf = fopen(PATH_OPERADORES, "r+b");
-    int ok = pf != NULL;
 
-    if (ok)
-    {
-        fseek(pf, posicion * sizeof(tOperador), SEEK_SET);
-        ok = fread(&op, sizeof(tOperador), 1, pf) == 1;
-        op.puntajeAcumulado += e->puntaje;
-        op.jornadas++;
-        fseek(pf, posicion * sizeof(tOperador), SEEK_SET);
-        ok = ok && fwrite(&op, sizeof(tOperador), 1, pf) == 1;
-        ok = fclose(pf) == 0 && ok;
-    }
-
+    if(!pf)
+        return 0;
+    fseek(pf, posicion * sizeof(tOperador), SEEK_SET);
+    fread(&op, sizeof(tOperador), 1, pf);
+    op.puntajeAcumulado += e->puntaje;
+    op.jornadas++;
+    fseek(pf, posicion * sizeof(tOperador), SEEK_SET);
+    fwrite(&op, sizeof(tOperador), 1, pf);
+    fclose(pf);
+    pf = fopen(PATH_JORNADAS, "ab");
+    if(!pf)
+        return 0;
+    memset(&jornada, 0, sizeof(tJornada));
     strncpy(jornada.operador, nombre, TAM_NOMBRE - 1);
-    *(jornada.operador + TAM_NOMBRE - 1) = '\0';
     jornada.puntaje = e->puntaje;
     jornada.contenedoresEntregados = e->contenedoresEntregados;
     jornada.buquesDescargados = e->buquesDescargados;
     jornada.camionesPendientes = e->camionesPendientes;
     jornada.reorganizaciones = e->reorganizaciones;
     jornada.tiempoUtilizado = e->reloj;
-    if (ok && (pf = fopen(PATH_JORNADAS, "ab")) != NULL)
-        ok = (fwrite(&jornada, sizeof(tJornada), 1, pf) == 1) & (fclose(pf) == 0);
-    else
-        ok = 0;
-    return ok;
+    fwrite(&jornada, sizeof(tJornada), 1, pf);
+    fclose(pf);
+    return 1;
 }
 
 void agregarAlRanking(void *info, unsigned tamInfo, unsigned n, void *params)
@@ -140,26 +137,18 @@ void mostrarRanking(tArbolBinBusq *indice)
 
 void normalizarNombreOperario(char* nombre)
 {
-    char* ini = nombre, *fin;
+    char *ini = nombre;
+    char *fin;
 
-    while(isspace(*ini))
-    {
+    while (isspace((unsigned char)*ini))
         ini++;
-    }
-
-    //if(ini != nombre)
-        //memmove(nombre, inicio, strlen(inicio)+1);
-    fin = nombre + strlen(ini);
-    while(fin > ini && isspace(*(fin-1)))
-    {
+    fin = ini + strlen(ini);
+    while (fin > ini && isspace((unsigned char)*(fin - 1)))
         fin--;
-    }
     *fin = '\0';
 
-    fin = ini;
-    while(*fin)
-    {
-        *fin = tolower(*fin);
-        fin++;
-    }
+    memmove(nombre, ini, fin - ini + 1);    /* +1 copia el '\0' */
+
+    for (fin = nombre; *fin; fin++)
+        *fin = tolower((unsigned char)*fin);
 }
