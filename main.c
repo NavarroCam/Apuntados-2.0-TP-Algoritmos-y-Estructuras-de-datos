@@ -16,6 +16,7 @@ int main()
     crearArbolBinBusq(&indice);
     cargarArchivoBinOrdenadoArbolBinBusq(&indice, PATH_INDICE, sizeof(tIndiceOperador));
     limpiarPantalla();
+    //system("start instructivo.pdf");
     mostrarTitulo(TITULO, CIAN);
     do
     {
@@ -39,23 +40,20 @@ int main()
     {
         mostrarMenuPrincipal(nombre, aviso);
         aviso = NULL;
-        scanf("%d", &opc);
         fflush(stdin);
+        scanf("%d", &opc);
         limpiarPantalla();
         switch(opc)
         {
         case 1:
         {
             nuevaJornada(posicion,nombre,PATH_CONFIG,PATH_PUERTO);
-            if(!esperarEnter())
-                opc = 3;
             break;
         }
         case 2:
         {
             mostrarRanking(&indice);
-            if(!esperarEnter())
-                opc = 3;
+            system("pause");
             break;
         }
         case 3:

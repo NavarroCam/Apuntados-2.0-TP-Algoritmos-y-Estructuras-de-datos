@@ -1,4 +1,5 @@
 #include "../include/operaciones.h"
+
 void avanzarReloj(tEstadoSimulacion *e, unsigned hasta)
 {
     tBuque buque;
@@ -137,43 +138,45 @@ const char *entregar(tEstadoSimulacion *e)
 
 const char *ejecutarOrden(tEstadoSimulacion *e, char *linea)
 {
-    char operacion[TAM_LINEA], recurso1, recurso2, extra;
+    char operacion[TAM_LINEA] = "";
+    char recurso1, recurso2, extra;
     unsigned id1, id2;
-    int leidos;
+    int n;
     char *c;
 
     for (c = linea; *c; c++)
         *c = toupper((unsigned char)*c);
-    leidos = sscanf(linea, "%s %c%u %c%u %c", operacion, &recurso1, &id1, &recurso2, &id2, &extra);
 
-    if (leidos < 1 || strlen(operacion) != 3)
-        return "el codigo de operacion debe tener exactamente tres caracteres";
+    n = sscanf(linea, "%s %c%u %c%u %c", operacion, &recurso1, &id1, &recurso2, &id2, &extra);
 
     if (!strcmp(operacion, "DES"))
-        return leidos == 5 && recurso1 == 'M' && recurso2 == 'Z' ? descargar(e, id1, id2) :
+        return n == 5 && recurso1 == 'M' && recurso2 == 'Z' ? descargar(e, id1, id2) :
                "sintaxis: DES <muelle> <zona>, por ejemplo DES M1 Z1";
 
     if (!strcmp(operacion, "REU"))
-        return leidos == 5 && recurso1 == 'Z' && recurso2 == 'Z' ? reubicar(e, id1, id2) :
+        return n == 5 && recurso1 == 'Z' && recurso2 == 'Z' ? reubicar(e, id1, id2) :
                "sintaxis: REU <zona_origen> <zona_destino>, por ejemplo REU Z1 Z2";
 
     if (!strcmp(operacion, "ENT"))
-        return leidos == 1 ? entregar(e) : SIN_PARAMETROS;
+        return n == 1 ? entregar(e) : SIN_PARAMETROS;
 
     if (!strcmp(operacion, "ESP"))
     {
-        if (leidos != 1 || !hayTiempo(e, 1))
-            return leidos != 1 ? SIN_PARAMETROS : SIN_TIEMPO;
-
+        if (n != 1)
+            return SIN_PARAMETROS;
+        if (!hayTiempo(e, 1))
+            return SIN_TIEMPO;
         completarOperacion(e, 1, "ESP . . .");
         return NULL;
     }
 
     if (!strcmp(operacion, "VER"))
     {
-        if (leidos == 1)
-            mostrarEstado(e);
-        return leidos == 1 ? NULL : SIN_PARAMETROS;
+        if (n != 1)
+            return SIN_PARAMETROS;
+        mostrarEstado(e);
+        return NULL;
     }
+
     return "codigo de operacion inexistente (DES, REU, ENT, VER o ESP)";
 }

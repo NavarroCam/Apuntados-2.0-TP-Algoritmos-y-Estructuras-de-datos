@@ -1,4 +1,4 @@
-duracion_jornada_minutos: 30
+duracion_jornada_minutos: 10
 cantidad_muelles: 2
 cantidad_zonas_almacenamiento: 3
 capacidad_pila: 3

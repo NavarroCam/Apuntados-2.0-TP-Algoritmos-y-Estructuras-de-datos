@@ -25,6 +25,7 @@ void nuevaJornada(unsigned posicion, const char *nombre, const char* archConfig,
         printf("%s  Error: %s tiene un formato invalido%s\n", ROJO, archPuerto, RESET);
     else
     {
+        fflush(stdin);
         jugarJornada(&estado);
         if (!registrarJornada(posicion, nombre, &estado))
             printf("%s  Error: no se pudo registrar la jornada%s\n", ROJO, RESET);
@@ -40,7 +41,7 @@ int hayOperacionValida(tEstadoSimulacion *e, const tRecursos *r)
     if (hayTiempo(e, e->config.tiempoDescargaContenedor) && r->ocupados && r->conLugar)
         return 1;
     if (hayTiempo(e, e->config.tiempoReubicacionContenedor) && r->contenedores > 1 &&
-        r->noVacias * r->conLugar > r->ambas)
+            r->noVacias * r->conLugar > r->ambas)
         return 1;
 
     if (!hayTiempo(e, e->config.tiempoCargaCamion) || !verPrimeroCola(&e->colaCamiones, &camion, sizeof(tCamion)))
@@ -97,12 +98,19 @@ void jugarJornada(tEstadoSimulacion *e)
             motivo = "se alcanzo la duracion maxima";
         else if (hayOperacionValida(e, &r))
         {
+            int hayLinea;
+
             if (e->reloj != relojMostrado)
                 mostrarEstadoBreve(e);
 
             relojMostrado = e->reloj;
             printf("%s%sOPERADOR>%s ", NEGRITA, AZUL, RESET);
-            if (!fgets(linea, sizeof(linea), stdin))
+
+            do
+                hayLinea = fgets(linea, sizeof(linea), stdin) != NULL;
+            while (hayLinea && linea[strspn(linea, " \t\r\n")] == '\0');
+
+            if (!hayLinea)
                 motivo = "fin de la entrada";
             else if ((error = ejecutarOrden(e, linea)) != NULL)
                 printf("  %sOrden rechazada: %s%s\n", ROJO, error, RESET);
@@ -118,4 +126,5 @@ void jugarJornada(tEstadoSimulacion *e)
 
     aplicarPenalizacion(e);
     mostrarResumen(e, motivo);
+    pausarPantalla();
 }
