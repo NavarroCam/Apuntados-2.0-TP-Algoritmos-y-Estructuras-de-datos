@@ -1,11 +1,5 @@
 #include "../include/operadores.h"
 
-typedef struct
-{
-    FILE *pf;
-    tArbolBinBusq *ranking;
-} tArmadoRanking;
-
 int compararIndices(const void *d1, const void *d2)
 {
     const tIndiceOperador *ind1 = d1, *ind2 = d2;
@@ -147,7 +141,7 @@ void normalizarNombreOperario(char* nombre)
         fin--;
     *fin = '\0';
 
-    memmove(nombre, ini, fin - ini + 1);    /* +1 copia el '\0' */
+    memmove(nombre, ini, fin - ini + 1);
 
     for (fin = nombre; *fin; fin++)
         *fin = tolower((unsigned char)*fin);

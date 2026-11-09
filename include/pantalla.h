@@ -35,6 +35,5 @@ void pausarPantalla(void);
 void mostrarBorde(char relleno, const char *color);
 void mostrarTitulo(const char *titulo, const char *color);
 void mostrarSeccion(const char *nombre);
-int esperarEnter(void);
 
 #endif /* PANTALLA_H_INCLUDED */

@@ -42,11 +42,3 @@ void mostrarSeccion(const char *nombre)
         putchar('-');
     printf("%s\n", RESET);
 }
-
-int esperarEnter(void)
-{
-    char linea[TAM_LINEA_PANTALLA];
-
-    printf("\n%s  Presione ENTER para volver al menu...%s", GRIS, RESET);
-    return fgets(linea, sizeof(linea), stdin) != NULL;
-}

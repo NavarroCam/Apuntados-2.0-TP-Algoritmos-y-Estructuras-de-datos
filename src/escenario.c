@@ -77,7 +77,6 @@ int cargarBuque(char *linea, tEstadoSimulacion *e, unsigned *ultimaLlegada)
     char *token;
     int fin = 0, ok;
 
-    /* %7 corresponde a TAM_CODIGO - 1 */
     ok = sscanf(linea, "%7[^;];T=%u;C=%n", buque.codigo, &buque.llegada, &fin) == 2 && fin &&
          buque.llegada >= *ultimaLlegada && buque.llegada < e->config.duracionJornadaMinutos;
     *ultimaLlegada = buque.llegada;

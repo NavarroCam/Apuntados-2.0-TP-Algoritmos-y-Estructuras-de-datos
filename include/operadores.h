@@ -37,6 +37,12 @@ typedef struct
     unsigned tiempoUtilizado;
 } tJornada;
 
+typedef struct
+{
+    FILE *pf;
+    tArbolBinBusq *ranking;
+} tArmadoRanking;
+
 int ingresarOperador(tArbolBinBusq *indice, const char *nombre, unsigned *posicion);
 int registrarJornada(unsigned posicion, const char *nombre, const tEstadoSimulacion *estado);
 void mostrarRanking(tArbolBinBusq *indice);
