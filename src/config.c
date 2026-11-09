@@ -32,7 +32,6 @@ void convertMinusCadena(char *cadena)
     }
 }
 
-/* Hasta MAX_DIGITOS digitos para que atoi no desborde. */
 int esNumeroPos(const char* cad)
 {
     if(*cad == '\0' || strlen(cad) > MAX_DIGITOS)
@@ -104,7 +103,6 @@ int cargarConfiguracion(tConfig *config, const char *nomArch)
     char *cadValor;
     unsigned valor;
 
-    /* Se cargan antes por si algun parametro falta o esta vacio. */
     establecerConfiguracionPorDefecto(config);
 
     pf = fopen(nomArch, "rt");
@@ -113,7 +111,6 @@ int cargarConfiguracion(tConfig *config, const char *nomArch)
 
     while(fgets(linea, TAM_LINEA_CONFIG, pf))
     {
-        /* Busca en la linea el primer ':' o '='. */
         separador = strpbrk(linea, ":=");
         if(separador != NULL)
         {

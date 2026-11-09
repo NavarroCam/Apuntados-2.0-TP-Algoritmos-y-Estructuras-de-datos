@@ -5,8 +5,6 @@
 #define SIN_MEMORIA         "memoria insuficiente"
 #define SIN_PARAMETROS      "la operacion no lleva parametros"
 
-/* Lleva el reloj a "hasta": pasa a espera los arribos con T <= hasta en orden
-   cronologico y asigna los muelles libres en orden creciente. */
 void avanzarReloj(tEstadoSimulacion *e, unsigned hasta)
 {
     tBuque buque;
@@ -33,23 +31,17 @@ int hayTiempo(const tEstadoSimulacion *e, unsigned duracion)
     return e->reloj + duracion <= e->config.duracionJornadaMinutos;
 }
 
-/* Registra la operacion y avanza el reloj hasta su fin. La descripcion trae
-   "OPERACION CONTENEDOR ORIGEN DESTINO", por ejemplo "DES C101 M1 Z1". Las
-   consecuencias directas ya fueron aplicadas por quien la llama. */
 void completarOperacion(tEstadoSimulacion *e, unsigned duracion, const char *descripcion)
 {
     tRegistroOperacion reg;
 
     reg.inicio = e->reloj;
     reg.fin = e->reloj + duracion;
-    /* %3s y %7s corresponden a TAM_OPERACION - 1 y TAM_CODIGO - 1 */
     sscanf(descripcion, "%3s %7s %7s %7s", reg.operacion, reg.contenedor, reg.origen, reg.destino);
     ponerAlFinal(&e->historial, &reg, sizeof(tRegistroOperacion));
     avanzarReloj(e, reg.fin);
 }
 
-/* Las validaciones se hacen sobre copias; los cambios, con acciones sobre
-   los elementos de las listas. */
 const char *descargar(tEstadoSimulacion *e, unsigned idMuelle, unsigned idZona)
 {
     tMuelle muelle;
@@ -200,9 +192,6 @@ int hayOperacionValida(tEstadoSimulacion *e, const tRecursos *r)
 
     if (hayTiempo(e, e->config.tiempoDescargaContenedor) && r->ocupados && r->conLugar)
         return 1;
-    /* pares (origen no vacia, destino con lugar) con origen distinto de destino.
-       Agregado del equipo: con un unico contenedor almacenado REU no cuenta,
-       porque moverlo de zona no cambia nada. */
     if (hayTiempo(e, e->config.tiempoReubicacionContenedor) && r->contenedores > 1 &&
         r->noVacias * r->conLugar > r->ambas)
         return 1;
@@ -248,8 +237,6 @@ void mostrarResumen(tEstadoSimulacion *e, const char *motivo)
     printf("  Puntuacion final: %d puntos\n", e->puntaje);
 }
 
-/* En cada vuelta se cuentan zonas y muelles una sola vez y con eso se evalua
-   primero la finalizacion normal y despues si hay una operacion valida. */
 void jugarJornada(tEstadoSimulacion *e)
 {
     char linea[TAM_LINEA];

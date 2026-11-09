@@ -17,9 +17,6 @@ typedef struct
     char codigo[TAM_CODIGO];
 } tContenedor;
 
-/* El manifiesto es una cola de tContenedor en el orden de puerto.txt.
-   Al copiar un tBuque se copian los punteros de la cola: la copia anterior
-   deja de usarse (el buque "se mueve", no se duplica). */
 typedef struct
 {
     char codigo[TAM_CODIGO];
@@ -34,7 +31,6 @@ typedef struct
     char contenedor[TAM_CODIGO];
 } tCamion;
 
-/* tZona y tMuelle empiezan con el id para compararlos con compararId. */
 typedef struct
 {
     unsigned id;
@@ -78,7 +74,6 @@ typedef struct
     unsigned camionesPendientes;
 } tEstadoSimulacion;
 
-/* Lo que cuentan contarZona y contarMuelle para evaluar la jornada. */
 typedef struct
 {
     unsigned noVacias;
@@ -88,7 +83,6 @@ typedef struct
     unsigned contenedores;
 } tRecursos;
 
-/* Parametro de las acciones que mueven un contenedor dentro de las listas. */
 typedef struct
 {
     tContenedor cont;
