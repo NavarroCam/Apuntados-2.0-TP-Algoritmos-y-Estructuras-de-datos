@@ -27,11 +27,11 @@
 #define GRIS        ""
 #endif
 
-#define ANCHO_PANTALLA      62
+#define ANCHO_PANTALLA      67
 #define TAM_LINEA_PANTALLA  128
 
-void limpiarPantalla(void);
-void pausarPantalla(void);
+void limpiarPantalla();
+void pausarPantalla();
 void mostrarBorde(char relleno, const char *color);
 void mostrarTitulo(const char *titulo, const char *color);
 void mostrarSeccion(const char *nombre);

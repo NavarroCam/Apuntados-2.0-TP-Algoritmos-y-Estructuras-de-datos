@@ -135,14 +135,21 @@ void normalizarNombreOperario(char* nombre)
     char *fin;
 
     while (isspace((unsigned char)*ini))
+    {
         ini++;
+    }
     fin = ini + strlen(ini);
     while (fin > ini && isspace((unsigned char)*(fin - 1)))
+    {
         fin--;
+    }
     *fin = '\0';
 
     memmove(nombre, ini, fin - ini + 1);
 
     for (fin = nombre; *fin; fin++)
-        *fin = tolower((unsigned char)*fin);
+    {
+        *fin = toupper((unsigned char)*fin);
+    }
+
 }

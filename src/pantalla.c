@@ -1,12 +1,12 @@
 #include "../include/pantalla.h"
 
-void limpiarPantalla(void)
+void limpiarPantalla()
 {
     fflush(stdout);
     system("cls");
 }
 
-void pausarPantalla(void)
+void pausarPantalla()
 {
     fflush(stdout);
     system("pause");
@@ -18,7 +18,9 @@ void mostrarBorde(char relleno, const char *color)
 
     printf("%s+", color);
     for (i = 0; i < ANCHO_PANTALLA; i++)
+    {
         putchar(relleno);
+    }
     printf("+%s\n", RESET);
 }
 
@@ -39,6 +41,8 @@ void mostrarSeccion(const char *nombre)
 
     printf("%s-- %s%s%s ", GRIS, RESET NEGRITA, nombre, RESET GRIS);
     for (i = largo + 2; i < ANCHO_PANTALLA; i++)
+    {
         putchar('-');
+    }
     printf("%s\n", RESET);
 }

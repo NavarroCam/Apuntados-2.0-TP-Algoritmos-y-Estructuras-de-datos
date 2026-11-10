@@ -148,13 +148,13 @@ void map(tLista* p, void* params, Accion accion)
     }
 }
 
-tNodo** buscarNodoLista(const tLista* p, const void* d, Cmp comparar)
+tLista* buscarNodoLista(const tLista* p, const void* d, Cmp comparar)
 {
     while (*p && comparar(d, (*p)->info))
         p = &(*p)->sig;
     if (!*p)
         return NULL;
-    return (tNodo**)p;
+    return (tLista*)p;
 }
 
 int buscarElemLista(const tLista* p, void* d, unsigned cantBytes, Cmp comparar)

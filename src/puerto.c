@@ -72,7 +72,7 @@ void vaciarEstadoSimulacion(tEstadoSimulacion *estado)
 
 int compararId(const void *d1, const void *d2)
 {
-    const unsigned *id1 = d1, *id2 = d2;
+    const unsigned *id1 = (unsigned*)d1, *id2 = (unsigned*)d2;
 
     return (*id1 > *id2) - (*id1 < *id2);
 }
@@ -165,9 +165,12 @@ void contarZona(void *info, unsigned tamInfo, unsigned n, void *params)
     tZona *zona = info;
     tRecursos *r = params;
 
-    r->noVacias += zona->cantidad > 0;
-    r->conLugar += zona->cantidad < zona->capacidad;
-    r->ambas += zona->cantidad > 0 && zona->cantidad < zona->capacidad;
+    if(zona->cantidad > 0)
+        r->noVacias++;
+    if(zona->cantidad < zona->capacidad)
+        r->conLugar++;
+    if(zona->cantidad < zona->capacidad && zona->cantidad > 0)
+        r->ambas++;
     r->contenedores += zona->cantidad;
 }
 

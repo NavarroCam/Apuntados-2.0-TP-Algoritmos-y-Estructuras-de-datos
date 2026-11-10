@@ -82,14 +82,14 @@ void jugarJornada(tEstadoSimulacion *e)
     char linea[TAM_LINEA];
     const char *motivo = NULL, *error;
     unsigned relojMostrado = e->config.duracionJornadaMinutos + 1;
-    tRecursos r, sinRecursos = {0, 0, 0, 0, 0};
+    tRecursos r;
 
     printf("\n");
     mostrarSeccion("INICIO DE LA JORNADA - comandos: DES, REU, ENT, VER, ESP");
     avanzarReloj(e, 0);
     while (!motivo)
     {
-        r = sinRecursos;
+        r = (tRecursos){0};
         map(&e->zonas, &r, contarZona);
         map(&e->muelles, &r, contarMuelle);
         if (finalizacionNormal(e, &r))
