@@ -16,7 +16,7 @@ int main()
     crearArbolBinBusq(&indice);
     cargarArchivoBinOrdenadoArbolBinBusq(&indice, PATH_INDICE, sizeof(tIndiceOperador));
     limpiarPantalla();
-    //system("start instructivo.pdf");
+    system("start instructivo.pdf");
     mostrarTitulo(TITULO, CIAN);
     do
     {
